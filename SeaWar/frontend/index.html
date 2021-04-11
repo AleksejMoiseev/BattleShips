@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>BattelShips</title>
+    <link rel="stylesheet" href="index.css">
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+
+
+</head>
+
+<body>
+  
+   
+
+<audio src="media/V.mp3" autoplay="autoplay"></audio>
+<audio src="media/soundPast.mp3" autoplay="autoplay"></audio>
+
+    <div class="fields">
+        <div class="img">
+            <img src="image/1261828954_battle-ships-seaonfire.png" width="100%" height="100%" alt="Корабль">
+        </div>
+        <div class="info">
+            <button data-deck = 1 data-deck-name = "one_deck">Однопалубный корабль</button>
+            <button data-deck = 2 data-deck-name = "two_deck">Двухпалубный корабль</button>
+            <button data-deck = 3 data-deck-name = "three_deck">Трехпалубный корабль</button>
+            <button data-deck = 4 data-deck-name = "four">Четырехпалубный корабль</button>
+            <div  id="info">
+                Battel Ships
+            </div>
+
+        </div>
+       
+        <div class="field first">
+            <div id="letter"></div>
+            <div id="letter">1</div>
+            <div id="letter">2</div>
+            <div id="letter">3</div>
+            <div id="letter">4</div>
+            <div id="letter">5</div>
+            <div id="letter">6</div>
+            <div id="letter">7</div>
+            <div id="letter">8</div>
+            <div id="letter">9</div>
+            <div id="letter">10</div>
+            <div id="numeral">A</div>
+            <div id="A1"></div>
+            <div id="A2"></div>
+            <div id="A3"></div>
+            <div id="A4" ></div>
+            <div id="A5"></div>
+            <div id="A6"></div>
+            <div id="A7"></div>
+            <div id="A8"></div>
+            <div id="A9"></div>
+            <div id="A10"></div>
+            <div id="numeral">B</div>
+            <div id="B1"></div>
+            <div id="B2"></div>
+            <div id="B3"></div>
+            <div id="B4"></div>
+            <div id="B5"></div>
+            <div id="B6"></div>
+            <div id="B7"></div>
+            <div id="B8"></div>
+            <div id="B9"></div>
+            <div id="B10"></div>
+            <div id="numeral">C</div>
+            <div id="C1"></div>
+            <div id="C2"></div>
+            <div id="C3"></div>
+            <div id="C4"></div>
+            <div id="C5"></div>
+            <div id="C6"></div>
+            <div id="C7"></div>
+            <div id="C8"></div>
+            <div id="C9"></div>
+            <div id="C10"></div>
+            <div id="numeral">D</div>
+            <div id="D1"></div>
+            <div id="D2"></div>
+            <div id="D3"></div>
+            <div id="D4"></div>
+            <div id="D5"></div>
+            <div id="D6"></div>
+            <div id="D7"></div>
+            <div id="D8"></div>
+            <div id="D9"></div>
+            <div id="D10"></div>
+            <div id="numeral">E</div>
+            <div id="E1"></div>
+            <div id="E2"></div>
+            <div id="E3"></div>
+            <div id="E4"></div>
+            <div id="E5"></div>
+            <div id="E6"></div>
+            <div id="E7"></div>
+            <div id="E8"></div>
+            <div id="E9"></div>
+            <div id="E10"></div>
+            <div id="numeral">I</div>
+            <div id="I1"></div>
+            <div id="I2"></div>
+            <div id="I3"></div>
+            <div id="I4"></div>
+            <div id="I5"></div>
+            <div id="I6"></div>
+            <div id="I7"></div>
+            <div id="I8"></div>
+            <div id="I9"></div>
+            <div id="I10"></div>
+            <div id="numeral">G</div>
+            <div id="G1"></div>
+            <div id="G2"></div>
+            <div id="G3"></div>
+            <div id="G4"></div>
+            <div id="G5"></div>
+            <div id="G6"></div>
+            <div id="G7"></div>
+            <div id="G8"></div>
+            <div id="G9"></div>
+            <div id="G10"></div>
+            <div id="numeral">H</div>
+            <div id="H1"></div>
+            <div id="H2"></div>
+            <div id="H3"></div>
+            <div id="H4"></div>
+            <div id="H5"></div>
+            <div id="H6"></div>
+            <div id="H7"></div>
+            <div id="H8"></div>
+            <div id="H9"></div>
+            <div id="H10"></div>
+            <div id="numeral">L</div>
+            <div id="L1"></div>
+            <div id="L2"></div>
+            <div id="L3"></div>
+            <div id="L4"></div>
+            <div id="L5"></div>
+            <div id="L6"></div>
+            <div id="L7"></div>
+            <div id="L8"></div>
+            <div id="L9"></div>
+            <div id="L10"></div>
+            <div id="numeral">K</div>
+            <div id="K1"></div>
+            <div id="K2"></div>
+            <div id="K3"></div>
+            <div id="K4"></div>
+            <div id="K5"></div>
+            <div id="K6"></div>
+            <div id="K7"></div>
+            <div id="K8"></div>
+            <div id="K9"></div>
+            <div id="K10"></div>
+
+
+        </div>
+        <div class="field second">
+            <div id="letter"></div>
+            <div id="letter">1</div>
+            <div id="letter">2</div>
+            <div id="letter">3</div>
+            <div id="letter">4</div>
+            <div id="letter">5</div>
+            <div id="letter">6</div>
+            <div id="letter">7</div>
+            <div id="letter">8</div>
+            <div id="letter">9</div>
+            <div id="letter">10</div>
+            <div id="numeral">A</div>
+            <div id="A1"></div>
+            <div id="A2"></div>
+            <div id="A3"></div>
+            <div id="A4"></div>
+            <div id="A5"></div>
+            <div id="A6"></div>
+            <div id="A7"></div>
+            <div id="A8"></div>
+            <div id="A9"></div>
+            <div id="A10"></div>
+            <div id="numeral">B</div>
+            <div id="B1"></div>
+            <div id="B2"></div>
+            <div id="B3"></div>
+            <div id="B4"></div>
+            <div id="B5"></div>
+            <div id="B6"></div>
+            <div id="B7"></div>
+            <div id="B8"></div>
+            <div id="B9"></div>
+            <div id="B10"></div>
+            <div id="numeral">C</div>
+            <div id="C1"></div>
+            <div id="C2"></div>
+            <div id="C3"></div>
+            <div id="C4"></div>
+            <div id="C5"></div>
+            <div id="C6"></div>
+            <div id="C7"></div>
+            <div id="C8"></div>
+            <div id="C9"></div>
+            <div id="C10"></div>
+            <div id="numeral">D</div>
+            <div id="D1"></div>
+            <div id="D2"></div>
+            <div id="D3"></div>
+            <div id="D4"></div>
+            <div id="D5"></div>
+            <div id="D6"></div>
+            <div id="D7"></div>
+            <div id="D8"></div>
+            <div id="D9"></div>
+            <div id="D10"></div>
+            <div id="numeral">E</div>
+            <div id="E1"></div>
+            <div id="E2"></div>
+            <div id="E3"></div>
+            <div id="E4"></div>
+            <div id="E5"></div>
+            <div id="E6"></div>
+            <div id="E7"></div>
+            <div id="E8"></div>
+            <div id="E9"></div>
+            <div id="E10"></div>
+            <div id="numeral">I</div>
+            <div id="I1"></div>
+            <div id="I2"></div>
+            <div id="I3"></div>
+            <div id="I4"></div>
+            <div id="I5"></div>
+            <div id="I6"></div>
+            <div id="I7"></div>
+            <div id="I8"></div>
+            <div id="I9"></div>
+            <div id="I10"></div>
+            <div id="numeral">G</div>
+            <div id="G1"></div>
+            <div id="G2"></div>
+            <div id="G3"></div>
+            <div id="G4"></div>
+            <div id="G5"></div>
+            <div id="G6"></div>
+            <div id="G7"></div>
+            <div id="G8"></div>
+            <div id="G9"></div>
+            <div id="G10"></div>
+            <div id="numeral">H</div>
+            <div id="H1"></div>
+            <div id="H2"></div>
+            <div id="H3"></div>
+            <div id="H4"></div>
+            <div id="H5"></div>
+            <div id="H6"></div>
+            <div id="H7"></div>
+            <div id="H8"></div>
+            <div id="H9"></div>
+            <div id="H10"></div>
+            <div id="numeral">L</div>
+            <div id="L1"></div>
+            <div id="L2"></div>
+            <div id="L3"></div>
+            <div id="L4"></div>
+            <div id="L5"></div>
+            <div id="L6"></div>
+            <div id="L7"></div>
+            <div id="L8"></div>
+            <div id="L9"></div>
+            <div id="L10"></div>
+            <div id="numeral">K</div>
+            <div id="K1"></div>
+            <div id="K2"></div>
+            <div id="K3"></div>
+            <div id="K4"></div>
+            <div id="K5"></div>
+            <div id="K6"></div>
+            <div id="K7"></div>
+            <div id="K8"></div>
+            <div id="K9"></div>
+            <div id="K10"></div>
+        </div>
+
+    </div>
+  
+
+    <script src="index_install_of_ships.js"></script>
+    <script src="index_hitting_ships.js"></script>
+</body></html>

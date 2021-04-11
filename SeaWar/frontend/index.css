@@ -1,0 +1,109 @@
+   * {
+        margin: 0;
+        padding-bottom: 0;
+        background: rgb(157,181,187);
+        font-family: fantasy;
+    }
+    .fields {
+        position: relative;
+        width: 1280px;
+        height: 960px;
+        border: 2px solid black;
+    }
+    .field {
+        width: 600px;
+        height: 600px;
+        background: #fff;
+       
+    }
+    .field div {
+        width: 52.5px;
+        height: 52.5px;
+        float: left;
+        margin: 1px;
+        background-color: rgb(118,188,245);
+    }
+    .field div:hover {
+        background: #ccc;
+    }
+    .field div:active {
+        background: red;
+    }
+    .first, .second {
+        position: absolute;
+        top: 25%;
+    }
+    .first {
+        left: 25px;
+    }
+    .second {
+        right: 25px;
+    }
+    h1{
+        text-align-last: center;
+    }
+/*
+    .info{
+        width: 10px;
+        height: 100px;
+        float: right;
+        padding-right: 20px;
+        margin-top: 60px;
+        margin-right: 46px;
+        padding-left: 2px;
+        background-image: url()
+        
+    }
+*/
+    .img{
+        width: 150px;
+        height: 225px;
+        position: absolute;
+        padding: 10px;
+        margin-left: 12px;
+    }
+    #letter{
+        display: table-cell;
+        color: black;
+        vertical-align:middle;
+        text-align: center;
+        float: inherit;
+        font-weight: 800;
+        font-family: monospace;
+        background:rgb(184,126,26);
+        border: 1px solid white;
+        font-size: x-large;
+
+    }
+#numeral{
+     
+        color: black;
+        display: table-cell;
+        text-align: center;
+        font-weight: 800;
+        font-family: monospace;
+        background:rgb(184,126,26);
+        font-size: x-large;
+    
+        }
+.info{
+    width: 900px;
+    height: 150px;
+    color: rgb(1,99,163);
+    text-align: center;
+    vertical-align: middle;
+    position: absolute;
+    padding-top: 10px;
+    margin-left: 300px;
+    font-size: xxx-large;
+    font-weight: 900;
+    font-family: academy engraved let;
+}
+
+button{
+    background: blue;
+    height: 40px;
+    color: yellow;
+    
+}
+
