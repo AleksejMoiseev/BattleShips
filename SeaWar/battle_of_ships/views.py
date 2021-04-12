@@ -133,7 +133,7 @@ class CreateUserAndGame(generics.CreateAPIView):
         game = Game.objects.get(id=id_game)
         created_user = u.objects.create(name=name, game=game)
         headers = self.get_success_headers(serializer.data)
-        headers['id_user'] = created_user.pk
+        headers['id'] = created_user.pk
         response = Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
         response.set_cookie(key='id', value=created_user.pk)
         return response
