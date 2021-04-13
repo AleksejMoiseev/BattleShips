@@ -51,14 +51,13 @@ class GameCreateView(generics.ListCreateAPIView):
     queryset = Game.objects.all()
 
 
-@method_decorator(csrf_exempt, name='create')
+@method_decorator(csrf_exempt, name='dispatch')
 class UserCreateView(generics.ListCreateAPIView, ExampleAuthentication):
     serializer_class = UserListSerializers
     queryset = u.objects.all()
 
     def create(self, request, *args, **kwargs):
         self.authenticate(request)
-        # request.set_cookie(key='id', value=38)
         print(request.user)
         print(request.session)
         serializer = self.get_serializer(data=request.data)
@@ -100,15 +99,6 @@ class UserDestroy(generics.RetrieveDestroyAPIView):
     queryset = u.objects.all()
 
 
-def assign_const(request):
-    settings.MY_CONST = 2222
-    print(settings.MY_CONST)
-    return HttpResponse(settings.MY_CONST)
-
-def view_const(request):
-    from django.conf import settings
-    print(settings.MY_CONST)
-    return HttpResponse(settings.MY_CONST)
 
 
 # class CreateUserAndGame(CreateView):
@@ -142,6 +132,26 @@ class CreateUserAndGame(generics.CreateAPIView):
 class UpdateShip(generics.RetrieveUpdateAPIView):
     serializer_class = UserShipStatusUpdate
     queryset = u.objects.all()
+
+    def put(self, request, *args, **kwargs):
+        print('request', request.cookies)
+        print("request cookies", request.cookies.get('id'))
+        return self.partial_update(request, *args, **kwargs)
+
+    def patch(self, request, *args, **kwargs):
+        print('request', request.COOKIES)
+        print("request cookies", request.COOKIES.get('id'))
+        user_id = request.COOKIES.get('id')
+        user = User.objects.get(pk=user_id)
+        all_user_in_game = User.objects.filter(game=user.game)
+        # for player in  all_user_in_game:
+
+
+
+
+
+
+        return self.partial_update(request, *args, **kwargs)
 
 
 @csrf_exempt

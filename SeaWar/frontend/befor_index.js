@@ -13,8 +13,22 @@ const HOST = 'http://battleships.lo';
                        },
                 success: function(data, output, status){
                     console.log("request suссessfull", data);
-                    
+                    cookie_all = document.cookie.split(";")[1].split('=');
+                    headers['id'] = cookie_all[1];
+                    console.log("request suссessfull", data);
+                    console.log("request suссessfull", headers);
+                    getAllHeaders = status.getAllResponseHeaders();
+                    headers_request = create_dict_of_headers(getAllHeaders);
+                    console.log("header = ",  headers_request);
+                    console.log("headers_request id", headers_request.get('id'));
+                    console.log('cookie_all', cookie_all);
+                    console.log('cookie_all', cookie_all[1]);
                     console.log(data['id']);
+                    console.log("headers_id", headers["id"]);
+                    console.log('status', output);
+                    console.log('status',status.status);
+                    if ( status.status >199 && status.status < 300)
+                        document.location.href = 'index.html';
                   
 
                     

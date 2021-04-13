@@ -25,9 +25,10 @@ SECRET_KEY = '@h11_8o$ni#b*579z2z-je(!)+5zn4b@zzu1%%+4b^6dk6f7p#'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['battleships.lo']
+ALLOWED_HOSTS = [
+    'battleships.lo',
+]
 
-MY_CONST = 11111
 
 
 # Application definition

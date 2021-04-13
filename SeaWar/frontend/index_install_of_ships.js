@@ -1,3 +1,8 @@
+let  cookie_all = document.cookie.split(";")[1].split('=');
+const HOST = 'http://battleships.lo';
+console.log(cookie_all);
+
+
 function Ship(coordinates){
     this.coordinates = coordinates;
     this.hit_coordinates = [];
@@ -134,50 +139,72 @@ var harborArr = [
         arrShipsCoordunate.push(coordinate);
         check_ban_place(data_index, 3);
         lenghtShip += 1;
-    }
-            
-         
+    }   
  }
     
-    var get_funcm = function()
-    {
-     info.innerText = "Установите координаты корабля на игровом поле";
-     for ( let i = 138; i < 247; i++ )
-     {
-          if (arrDiv[i].id != "numeral")
-          {
-             arrDiv[i].setAttribute("data-pole", 1);
-             arrDiv[i].setAttribute("data-index", i);
-             arrDiv[i].onclick = givePlaceShips;
-          }      
-     }
-        
-    }
+var get_funcm = function(){
+  info.innerText = "Установите координаты корабля на игровом поле";
+  for ( let i = 138; i < 247; i++ ){
+    if (arrDiv[i].id != "numeral"){
+       arrDiv[i].setAttribute("data-pole", 1);
+       arrDiv[i].setAttribute("data-index", i);
+       arrDiv[i].onclick = givePlaceShips;
+    }      
+ }}
 
 
-    get_funcm();
+get_funcm();
+
+
+
 
 var img = $("img");
-var USER = 10;
+var USER = +cookie_all[1];
+console.log("USER", USER);
 
-console.log(JSON.stringify(harborArr));
-    let ready = function(){
-        
-        $.ajax({
-                url: "http://127.0.0.1:8000/api/v1/ajax/update_user/" + USER + "/",
-                type: "PATCH",
-                data: {
-                        "ship": JSON.stringify(harborArr),
-                        "status": 1,
-                       },
-                success: function(data, output, status){
-                    console.log("request suссessfull", data);
-                },
-            });
-    }
+
+
+var headers  = {
+'id': ''
+};
+
+
+
+var check_install_ships = function(){
+
+  if (number_of_ships['one_deck'] == 0 && 
+    number_of_ships['two_deck'] == 0 && 
+    number_of_ships['three_deck'] == 0 && number_of_ships['four'] == 0 ){
+    return true;
+  }
+  return false;
+}
+
+let ready = function(){
+  console.log("check_install_ships()", check_install_ships());
+  console.log(JSON.stringify(harborArr));
+  
+  if (true){
+    
+    $.ajax({
+            url: HOST + "/api/v1/ajax/update_user/" + USER + "/",
+            type: "PATCH",
+            data: {
+                    "ship": JSON.stringify(harborArr),
+                    "status": 1,
+                   },
+            headers: {
+                     "id": USER,
+            },
+            success: function(data, output, status){
+                console.log("request suссessfull", data);
+            },
+        });
+}}
 
     
 
 img.on("click", ready);
+
 
 
