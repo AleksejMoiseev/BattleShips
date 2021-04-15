@@ -1,6 +1,8 @@
 let  cookie_all = document.cookie.split(";")[1].split('=');
 const HOST = 'http://battleships.lo';
 console.log(cookie_all);
+var USER = +cookie_all[1];
+console.log("USER", USER);
 
 
 function Ship(coordinates){
@@ -159,8 +161,7 @@ get_funcm();
 
 
 var img = $("img");
-var USER = +cookie_all[1];
-console.log("USER", USER);
+
 
 
 

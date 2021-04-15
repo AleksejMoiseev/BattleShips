@@ -63,7 +63,7 @@ function output ( value ){
      
      
       $.ajax({
-                url: "http://127.0.0.1:8000/faire/",
+                url: HOST + "/api/v1/ajax/faire/",
                 type: "POST",
                 data: {
                         "coordinate": coordinate,
@@ -91,7 +91,13 @@ function output ( value ){
         }
     }
 }
- function check_hit(ship, coordinate) {
+
+
+
+
+
+
+function check_hit(ship, coordinate) {
     if (!(contains ( ship.coordinates, coordinate))) {
         return 'mimo'
     }

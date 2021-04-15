@@ -3,6 +3,8 @@ from django.http import HttpResponse
 from rest_framework import generics, status
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from django.views.generic import ListView
+from rest_framework.decorators import api_view
 
 
 from battle_of_ships.forms import CreateUserForm
@@ -52,7 +54,7 @@ class GameCreateView(generics.ListCreateAPIView):
 
 
 @method_decorator(csrf_exempt, name='dispatch')
-class UserCreateView(generics.ListCreateAPIView, ExampleAuthentication):
+class UserCreateView(generics.ListCreateAPIView):
     serializer_class = UserListSerializers
     queryset = u.objects.all()
 
@@ -139,29 +141,64 @@ class UpdateShip(generics.RetrieveUpdateAPIView):
         return self.partial_update(request, *args, **kwargs)
 
     def patch(self, request, *args, **kwargs):
+        # print('request', request.COOKIES)
+        # print("request cookies", request.COOKIES.get('id'))
+        # user_id = request.COOKIES.get('id')
+        # print(choice_ready_user(user_id=user_id))
+        return self.partial_update(request, *args, **kwargs)
+
+    def update(self, request, *args, **kwargs):
         print('request', request.COOKIES)
         print("request cookies", request.COOKIES.get('id'))
         user_id = request.COOKIES.get('id')
-        user = User.objects.get(pk=user_id)
-        all_user_in_game = User.objects.filter(game=user.game)
-        # for player in  all_user_in_game:
+        partial = kwargs.pop('partial', False)
+        instance = self.get_object()
+        serializer = self.get_serializer(instance, data=request.data, partial=partial)
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
 
+        if getattr(instance, '_prefetched_objects_cache', None):
+            # If 'prefetch_related' has been applied to a queryset, we need to
+            # forcibly invalidate the prefetch cache on the instance.
+            instance._prefetched_objects_cache = {}
 
-
-
-
-
-        return self.partial_update(request, *args, **kwargs)
+        print(choice_ready_user(user_id=user_id))
+        return Response(serializer.data)
 
 
 @csrf_exempt
 def faire(request):
-    print(request.POST)
+    user_id = request.COOKIES.get('id')
+    print(user_id)
+    print(request.COOKIES)
+    coordinate = request.POST['coordinate']
+    print(coordinate)
+    print(coordinate.encode())
+    print(type(coordinate))
     response = HttpResponse()
-    response.set_cookie(key='set_cookie', value='B3')
     print("proba")
-    response.content = b'B3'
+    response.content = coordinate.encode()
+    next_move_user, game = next_move(user_id=user_id)
+    print('следующий ход делает user:', next_move_user)
+    redis_key = 'current_' + str(game.id)
+    print('value redis', redis.get(name=redis_key))
     return response
+
+
+@api_view(['GET'])
+def get_current_move(request):
+    user_id = request.COOKIES.get('id')
+    game = u.objects.get(pk=user_id).game
+    print(user_id)
+    print(request.GET)
+    response = HttpResponse()
+    redis_key = 'current_' + str(game.id)
+    current_move = redis.get(name=redis_key)
+    response.content = current_move.encode()
+    return response
+
+
+
 
 
 
