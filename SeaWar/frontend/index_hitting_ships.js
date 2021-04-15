@@ -50,9 +50,39 @@ function output ( value ){
 //    this.coordinates = coordinates;
 //    this.hit_coordinates = [];
 //}
-    
+
+
+
+var check;
+var check_move = function(e){
+
+   
+
+    $.ajax({
+                url: HOST + "/api/v1/ajax/get_current_move/",
+                type: "GET",
+                success: function(data, output, status){
+                    console.log("responce", data);
+                    console.log("type", typeof(data));
+                    console.log("user_id", USER);
+                    if (USER == +data){
+                        console.log('выстрел');
+                        fire(e);
+                    }
+                    else{
+                        console.log("не твой ход");
+                    }
+                },
+            });
+
+}
+
+
+$("#check").on('click', check_move) 
     
  var fire = function ( e ) {
+
+
     var coordinate = e.target.id;
     console.log(coordinate);
     if (contains ( arrShots, coordinate)) {
@@ -123,7 +153,9 @@ function check_hit(ship, coordinate) {
 //    var arrDiv = document.querySelectorAll ('div');
     for ( let i = 16; i < 125; i++ ){
         if (arrDiv[i].id != "numeral"){
-            arrDiv[i].onclick = fire;
+            // arrDiv[i].onclick = fire;
+            arrDiv[i].onclick = check_move;
+
         }
         
     }

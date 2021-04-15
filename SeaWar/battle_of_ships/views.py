@@ -9,12 +9,11 @@ from rest_framework.decorators import api_view
 
 from battle_of_ships.forms import CreateUserForm
 from battle_of_ships.serializers import *
-from battle_of_ships.models import User as u
+from battle_of_ships.models import User
 from battle_of_ships.models import Game
 from rest_framework.permissions import AllowAny
 from django.views.generic import CreateView
 from rest_framework.authtoken.models import Token
-from django.contrib.auth.models import User as auth
 
 
 from rest_framework import authentication
@@ -25,23 +24,9 @@ from django.conf import settings
 from django.views.decorators.csrf import csrf_exempt, csrf_protect
 from django.utils.decorators import method_decorator
 
+from battle_of_ships.shortcart import redis, get_users, next_move, choice_ready_user
 
-
-class ExampleAuthentication(authentication.BaseAuthentication):
-    def authenticate(self, request):
-        username = request.META.get('HTTP_X_USERNAME')
-        if not username:
-            return None
-
-        try:
-            user = auth.objects.get(username=username)
-            print(user)
-        except auth.DoesNotExist:
-            raise exceptions.AuthenticationFailed('No such user')
-
-        return (user, None)
-
-# Create your views here.
+CURRENT_USER_KEY_PREFIX = 'current:{}'
 
 
 def myfunc(request):
@@ -56,10 +41,10 @@ class GameCreateView(generics.ListCreateAPIView):
 @method_decorator(csrf_exempt, name='dispatch')
 class UserCreateView(generics.ListCreateAPIView):
     serializer_class = UserListSerializers
-    queryset = u.objects.all()
+    queryset = User.objects.all()
 
     def create(self, request, *args, **kwargs):
-        self.authenticate(request)
+        # self.authenticate(request)
         print(request.user)
         print(request.session)
         serializer = self.get_serializer(data=request.data)
@@ -123,7 +108,7 @@ class CreateUserAndGame(generics.CreateAPIView):
         self.perform_create(serializer)
         id_game = serializer.data['id']
         game = Game.objects.get(id=id_game)
-        created_user = u.objects.create(name=name, game=game)
+        created_user = User.objects.create(name=name, game=game)
         headers = self.get_success_headers(serializer.data)
         headers['id'] = created_user.pk
         response = Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
@@ -133,7 +118,7 @@ class CreateUserAndGame(generics.CreateAPIView):
 
 class UpdateShip(generics.RetrieveUpdateAPIView):
     serializer_class = UserShipStatusUpdate
-    queryset = u.objects.all()
+    queryset = User.objects.all()
 
     def put(self, request, *args, **kwargs):
         print('request', request.cookies)
@@ -188,13 +173,15 @@ def faire(request):
 @api_view(['GET'])
 def get_current_move(request):
     user_id = request.COOKIES.get('id')
-    game = u.objects.get(pk=user_id).game
+    game = User.objects.get(pk=user_id).game
     print(user_id)
     print(request.GET)
     response = HttpResponse()
     redis_key = 'current_' + str(game.id)
+    print(redis_key)
     current_move = redis.get(name=redis_key)
-    response.content = current_move.encode()
+    response.content = current_move
+    print("current_move", current_move)
     return response
 
 

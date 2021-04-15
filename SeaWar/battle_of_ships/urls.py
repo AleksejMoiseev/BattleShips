@@ -15,4 +15,5 @@ urlpatterns = [
     path('createuser/', CreateUserAndGame.as_view()),
     path('update_user/<int:pk>/', UpdateShip.as_view()),
     path('faire/', faire, name="faire"),
+    path('get_current_move/', get_current_move, name="get_current_move"),
 ]

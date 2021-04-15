@@ -278,6 +278,7 @@ console.log(JSON.stringify(harborArr));
     
 
 img.on("click", ready);
+console.log("headers",headers);
 
 
 

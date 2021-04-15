@@ -1,7 +1,23 @@
-let  cookie_all = document.cookie.split(";")[1].split('=');
+ var  cookie_all = document.cookie.split(";");
+
+let get_user_cookie = function(){
+    let cookie_id;
+
+   console.log(cookie_all);
+
+    for (let i = 0; i < cookie_all.length; i++){
+      if ( cookie_all[i].split('=')[0].replace( /\s/g, '') == 'id'){
+        
+        cookie_id = cookie_all[i].split('=')[1];
+      }
+      console.log(cookie_all[i].split('=')[0]);
+    }
+    return +cookie_id
+}
+
+
 const HOST = 'http://battleships.lo';
-console.log(cookie_all);
-var USER = +cookie_all[1];
+var USER = get_user_cookie();
 console.log("USER", USER);
 
 
@@ -185,7 +201,7 @@ let ready = function(){
   console.log("check_install_ships()", check_install_ships());
   console.log(JSON.stringify(harborArr));
   
-  if (true){
+  if (check_install_ships()){
     
     $.ajax({
             url: HOST + "/api/v1/ajax/update_user/" + USER + "/",

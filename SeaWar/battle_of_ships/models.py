@@ -29,7 +29,7 @@ class User(models.Model):
         (2, 'not_ready'),
     )
     name = models.CharField(max_length=50)
-    ship = models.CharField( max_length=1000, null=True)
+    ship = models.JSONField(null=True)
     status = models.SmallIntegerField(default=2, choices=status_user)
     game = models.ForeignKey(to="Game", verbose_name="UUID", on_delete=models.CASCADE)
 
