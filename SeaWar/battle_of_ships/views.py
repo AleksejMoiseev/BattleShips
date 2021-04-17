@@ -23,10 +23,19 @@ from django.conf import settings
 
 from django.views.decorators.csrf import csrf_exempt, csrf_protect
 from django.utils.decorators import method_decorator
+from rest_framework.renderers import JSONRenderer
 
-from battle_of_ships.shortcart import redis, get_users, next_move, choice_ready_user
+from battle_of_ships.shortcart import (
+    redis, get_users, next_move, choice_ready_user,
+    get_enemy, DoesNotUser
+)
 
 CURRENT_USER_KEY_PREFIX = 'current:{}'
+SET_CONTAINS_SHOTS_USER_KEY_PREFIX = 'set'
+
+
+
+
 
 
 def myfunc(request):
@@ -166,7 +175,10 @@ def faire(request):
     next_move_user, game = next_move(user_id=user_id)
     print('следующий ход делает user:', next_move_user)
     redis_key = 'current_' + str(game.id)
+    redis_key_set_shots = SET_CONTAINS_SHOTS_USER_KEY_PREFIX + str(game.id) + str(user_id)
+    print("redis_key_set_shots", redis_key_set_shots)
     print('value redis', redis.get(name=redis_key))
+    print('shots in set', redis.sadd(redis_key_set_shots, coordinate))
     return response
 
 
@@ -183,6 +195,27 @@ def get_current_move(request):
     response.content = current_move
     print("current_move", current_move)
     return response
+
+
+@api_view(['GET'])
+def get_shots_enemy(request):
+    try:
+        user_id = request.COOKIES.get('id')
+        print('user_id request', user_id)
+        if user_id == None:
+            raise DoesNotUser
+    except DoesNotUser:
+        print(" i here")
+        return HttpResponse("<h1>Нет USERA</h1>")
+    game, user_enemy = get_enemy(user_id=user_id)
+    redis_key_get_shots = SET_CONTAINS_SHOTS_USER_KEY_PREFIX + str(game.id) + str(user_enemy.id)
+    print(" redis_key_get_shots", redis_key_get_shots)
+    set_shots_enemy = redis.smembers(redis_key_get_shots)
+    # set_shots_enemy = redis.smembers(name='myset2')
+    set_shots_enemy_in_json = JSONRenderer().render(data=set_shots_enemy)
+    print("set_shots_enemy_in_json", set_shots_enemy_in_json)
+    print("set_shots_enemy", set_shots_enemy)
+    return HttpResponse(content=set_shots_enemy_in_json)
 
 
 

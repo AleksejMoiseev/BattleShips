@@ -20,6 +20,11 @@ const HOST = 'http://battleships.lo';
 var USER = get_user_cookie();
 console.log("USER", USER);
 
+var StoragUserIdName = "shots_enemy" + String(USER);
+sessionStorage.setItem('shots_enemy', StoragUserIdName)
+console.log(StoragUserIdName);
+sessionStorage.setItem(StoragUserIdName, []);
+
 
 function Ship(coordinates){
     this.coordinates = coordinates;
@@ -215,6 +220,7 @@ let ready = function(){
             },
             success: function(data, output, status){
                 console.log("request suссessfull", data);
+                get_name_user_next_move();
             },
         });
 }}

@@ -53,6 +53,31 @@ function output ( value ){
 
 
 
+
+var show_hit = function(coordinate){
+
+    console.log(harborArr);
+    t = ".second #"+coordinate;
+    console.log($(t));
+
+    for ( var i = 0; i < harborArr.length; i++ ){
+        var ship = harborArr[i];
+        var hit_result = check_hit(ship, coordinate);
+        output(hit_result);
+        if ( hit_result == "ranen" || hit_result == "killed" ){
+             $(".second #"+coordinate).css('background-image', "url('image/scelet.png')");
+             break;
+        } 
+        else{
+             $(".second #"+coordinate).css('background-image', "url('image/krest.png')");
+        }
+    }
+
+
+}
+
+
+
 var check;
 var check_move = function(e){
 
@@ -67,10 +92,13 @@ var check_move = function(e){
                     console.log("user_id", USER);
                     if (USER == +data){
                         console.log('выстрел');
+                        $("#info").text("Выстрел");
                         fire(e);
+                        setTimeout(get_set_shots_enemy_user, 1000);
+                        
                     }
                     else{
-                        console.log("не твой ход");
+                        $("#info").text("Ходит противник");
                     }
                 },
             });
@@ -78,17 +106,62 @@ var check_move = function(e){
 }
 
 
-$("#check").on('click', check_move) 
+
+
+var get_set_shots_enemy_user = function(){
+
+     $.ajax({
+                url: HOST + "/api/v1/ajax/get_shots_enemy/",
+                type: "GET",
+                success: function(data, output, status){
+                    console.log("responce", data);
+                    let set_enemy = JSON.parse(data);
+                    console.log(set_enemy);
+                    console.log(typeof(data));
+                    console.log(typeof(set_enemy));
+                    let sessionStoragUserId = sessionStorage.getItem('shots_enemy');
+                    let arrB = sessionStorage.getItem(sessionStoragUserId);
+                    console.log("!!!!!arrB", arrB);
+                    let difference = set_enemy.filter(x => !arrB.includes(x));
+                    console.log(difference);
+                    if ( difference != 0){
+                        sessionStorage.setItem(sessionStoragUserId, set_enemy);
+                        let coordinate_enemy_shot = difference[0];
+                        console.log(typeof(coordinate_enemy_shot));
+                        console.log("coordinate_enemy_shot", coordinate_enemy_shot)
+                        show_hit(coordinate_enemy_shot);
+                    }
+            
+                },
+            });
+}
+
+var arrShots =[];
+$("#check").on('click', get_set_shots_enemy_user);
     
  var fire = function ( e ) {
 
 
     var coordinate = e.target.id;
     console.log(coordinate);
-    if (contains ( arrShots, coordinate)) {
-        return;
-    }
+
+    // возможен бесконечный цикл!!!!
+
+    do{
+        $("#info").text("Капитан твой выстрел");
+    }while (contains ( arrShots, coordinate))
+
+
+
+
+
+
+    // if (contains ( arrShots, coordinate)) {
+    //     return;
+    // }
     arrShots.push(coordinate);
+    $(".first #"+coordinate).css('background-image', "url('image/krest.png')");
+    soundClick();
      
      
      
@@ -103,23 +176,18 @@ $("#check").on('click', check_move)
                 },
             });
      
-     
-     
-     
-     
-     
-    for ( var i = 0; i < harborArr.length; i++ ){
-        var ship = harborArr[i];
-        var hit_result = check_hit(ship, coordinate);
-        output(hit_result);
-        if ( hit_result == "ranen" || hit_result == "killed" ){
-             e.target.style.backgroundImage = "url('image/scelet.png')";
-             break;
-        } 
-        else{
-             e.target.style.backgroundImage = "url('image/krest.png')";
-        }
-    }
+    // for ( var i = 0; i < harborArr.length; i++ ){
+    //     var ship = harborArr[i];
+    //     var hit_result = check_hit(ship, coordinate);
+    //     output(hit_result);
+    //     if ( hit_result == "ranen" || hit_result == "killed" ){
+    //          e.target.style.backgroundImage = "url('image/scelet.png')";
+    //          break;
+    //     } 
+    //     else{
+    //          e.target.style.backgroundImage = "url('image/krest.png')";
+    //     }
+    // }
 }
 
 
@@ -149,7 +217,7 @@ function check_hit(ship, coordinate) {
 ////    new Ship (['A3', 'A4']),
 ////    new Ship (['A9', 'B9', 'C9'])
 //    ];
-    var arrShots =[];
+   
 //    var arrDiv = document.querySelectorAll ('div');
     for ( let i = 16; i < 125; i++ ){
         if (arrDiv[i].id != "numeral"){

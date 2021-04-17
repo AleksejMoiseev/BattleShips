@@ -16,4 +16,5 @@ urlpatterns = [
     path('update_user/<int:pk>/', UpdateShip.as_view()),
     path('faire/', faire, name="faire"),
     path('get_current_move/', get_current_move, name="get_current_move"),
+    path('get_shots_enemy/', get_shots_enemy, name="get_shots_enemy"),
 ]
