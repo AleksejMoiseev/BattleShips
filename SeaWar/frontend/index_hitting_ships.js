@@ -119,14 +119,14 @@ var get_set_shots_enemy_user = function(){
                 url: HOST + "/api/v1/ajax/get_shots_enemy/",
                 type: "GET",
                 success: function(data, output, status){
-                    console.log("responce", data);
+                    // console.log("responce", data);
                     let set_enemy = JSON.parse(data);
-                    console.log(set_enemy);
-                    console.log(typeof(data));
-                    console.log(typeof(set_enemy));
+                    // console.log(set_enemy);
+                    // console.log(typeof(data));
+                    // console.log(typeof(set_enemy));
                     let sessionStoragUserId = sessionStorage.getItem('shots_enemy');
                     let arrB = sessionStorage.getItem(sessionStoragUserId);
-                    console.log("!!!!!arrB", arrB);
+                    // console.log("!!!!!arrB", arrB);
                     let difference = set_enemy.filter(x => !arrB.includes(x));
                     console.log(difference);
                     if ( difference != 0){

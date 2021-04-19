@@ -97,7 +97,7 @@ def save_enemy_ship(ships_json, user_id):
     enemy_user_id.ship = ships_json
     enemy_user_id.save()
 
-
+1
 def get_array_ships(list_json_objects):
     harborArr = []
     for json_object in list_json_objects:

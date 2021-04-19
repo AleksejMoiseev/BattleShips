@@ -27,3 +27,9 @@ class UserShipStatusUpdate(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ("ship", "status",)
+
+
+class ListGame(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ('game',)

@@ -36,12 +36,9 @@ CURRENT_USER_KEY_PREFIX = 'current:{}'
 SET_CONTAINS_SHOTS_USER_KEY_PREFIX = 'set'
 
 
-
-
-
-
-def myfunc(request):
-    return HttpResponse("<h1>Privet</h1>")
+class GameView(generics.RetrieveAPIView):
+    serializer_class = ListGame
+    queryset = User.objects.all()
 
 
 class GameCreateView(generics.ListCreateAPIView):
@@ -63,9 +60,6 @@ class UserCreateView(generics.ListCreateAPIView):
         self.perform_create(serializer)
         headers = self.get_success_headers(serializer.data)
         id_user = serializer.data['id']
-        # request.session['id'] = id_user
-        # print(request.session)
-        # print(request.session['id'])
         headers['id'] = id_user
         response = Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
         response.set_cookie(key='id', value=id_user)
@@ -130,18 +124,6 @@ class CreateUserAndGame(generics.CreateAPIView):
 class UpdateShip(generics.RetrieveUpdateAPIView):
     serializer_class = UserShipStatusUpdate
     queryset = User.objects.all()
-
-    def put(self, request, *args, **kwargs):
-        print('request', request.cookies)
-        print("request cookies", request.cookies.get('id'))
-        return self.partial_update(request, *args, **kwargs)
-
-    def patch(self, request, *args, **kwargs):
-        # print('request', request.COOKIES)
-        # print("request cookies", request.COOKIES.get('id'))
-        # user_id = request.COOKIES.get('id')
-        # print(choice_ready_user(user_id=user_id))
-        return self.partial_update(request, *args, **kwargs)
 
     def update(self, request, *args, **kwargs):
         print('request', request.COOKIES)

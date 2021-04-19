@@ -26,6 +26,20 @@ console.log(StoragUserIdName);
 sessionStorage.setItem(StoragUserIdName, []);
 
 
+function loadPage(){
+
+   $.ajax({
+                url: HOST + "/api/v1/ajax/get_id_game/" + USER + "/",
+                type: "GET",
+                success: function(data, output, status){
+                    console.log("responce", data);
+                    $("h1").text(data['game']);
+                },
+
+            });
+}
+
+
 function Ship(coordinates){
     this.coordinates = coordinates;
     this.hit_coordinates = [];
@@ -223,7 +237,10 @@ let ready = function(){
                 get_name_user_next_move();
             },
         });
-}}
+}
+
+  setInterval(get_set_shots_enemy_user, 1000);
+}
 
     
 

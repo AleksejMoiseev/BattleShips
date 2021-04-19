@@ -6,7 +6,6 @@ from django.urls import path
 from battle_of_ships.views import *
 
 urlpatterns = [
-    path('', myfunc, name='myfunc'),
     path('game/', GameCreateView.as_view()),
     path('user/', UserCreateView.as_view()),
     path('getfunc/<uuid:id>/', GameDetailView.as_view()),
@@ -17,4 +16,5 @@ urlpatterns = [
     path('faire/', faire, name="faire"),
     path('get_current_move/', get_current_move, name="get_current_move"),
     path('get_shots_enemy/', get_shots_enemy, name="get_shots_enemy"),
+    path('get_id_game/<int:pk>/', GameView.as_view()),
 ]
