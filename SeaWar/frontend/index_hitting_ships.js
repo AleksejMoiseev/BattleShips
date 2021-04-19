@@ -160,7 +160,7 @@ $("#check").on('click', get_set_shots_enemy_user);
     //     return;
     // }
     arrShots.push(coordinate);
-    $(".first #"+coordinate).css('background-image', "url('image/krest.png')");
+    $(".first #"+coordinate).css('background-image', "url('image/hourglass.png')");
     soundClick();
      
      
@@ -173,6 +173,18 @@ $("#check").on('click', get_set_shots_enemy_user);
                        },
                 success: function(data, output, status){
                     console.log("request suссessfull", data);
+                    console.log('type data', typeof(data));
+                    let hitResult = JSON.parse(data);
+                    console.log(hitResult);
+                    if (hitResult['hit_result'] == 'mimo'){
+                        $(".first #"+coordinate).css('background-image', "url('image/krest.png')");
+                         $("#info").text("Стреляет противник");
+
+                    }
+                    else if (hitResult['hit_result'] == 'ranen' || hitResult['hit_result'] == 'killed'){
+                        $(".first #"+coordinate).css('background-image', "url('image/bum.png')");
+                         $("#info").text("Капитан твой выстрел");
+                    }
                 },
             });
      
