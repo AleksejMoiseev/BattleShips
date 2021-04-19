@@ -165,24 +165,27 @@ class UpdateShip(generics.RetrieveUpdateAPIView):
 @csrf_exempt
 def faire(request):
     user_id = request.COOKIES.get('id')
-    print(user_id)
-    print(request.COOKIES)
     coordinate = request.POST['coordinate']
-    print(coordinate)
-    # print(coordinate.encode())
     response = HttpResponse()
-    # response.content = coordinate.encode()
 
     game, list_of_ships_enemy = get_enemy_ships(user_id=user_id)
     harbor_arr_ships_enemy = get_array_ships(list_json_objects=list_of_ships_enemy)
+    print(harbor_arr_ships_enemy)
     hit_result = check_hit(harbor=harbor_arr_ships_enemy, coordinate=coordinate)
+    print('hit_result', hit_result)
     harbor_arr_ready_save_to_database = ships_to_json(arrships_objects=harbor_arr_ships_enemy)
     save_enemy_ship(ships_json=harbor_arr_ready_save_to_database, user_id=user_id)
+    print("check_winner(arr_ships=harbor_arr_ships_enemy)", check_winner(arr_ships=harbor_arr_ships_enemy))
     if check_winner(arr_ships=harbor_arr_ships_enemy):
-        game.status = 0
+        user = User.objects.get(pk=user_id)
+        user_name = user.name
+        user.game.status = Game.Status.FINISHED
+        user.game.winner = user_name
+        user.game.save()
         print("СТАТУС ИГРЫ - Зашли в победу", game.status)
-        data = {"coordinate": coordinate, "hit_result": "win"}
+        data = {"coordinate": coordinate, "hit_result": "win", "winner": user_name}
         content = JSONRenderer().render(data=data)
+        print("content", content)
         response.content = content
         return response
     if hit_result == 'mimo':
@@ -192,9 +195,9 @@ def faire(request):
         print('value redis', redis.get(name=redis_key))
 
     redis_key_set_shots = SET_CONTAINS_SHOTS_USER_KEY_PREFIX + str(game.id) + str(user_id)
-    print("redis_key_set_shots", redis_key_set_shots)
-    print('shots in set', redis.sadd(redis_key_set_shots, coordinate))
+    # print("redis_key_set_shots", redis_key_set_shots)
 
+    redis.sadd(redis_key_set_shots, coordinate)
     data = {"coordinate": coordinate, "hit_result": hit_result}
     content = JSONRenderer().render(data=data)
 
@@ -206,14 +209,27 @@ def faire(request):
 @api_view(['GET'])
 def get_current_move(request):
     user_id = request.COOKIES.get('id')
-    game = User.objects.get(pk=user_id).game
-    print(user_id)
-    print(request.GET)
+    user = User.objects.get(pk=user_id)
+    game = user.game
+    status = game.status
+    winner = user.game.winner
     response = HttpResponse()
+    if status == 0:
+        print('Мы здесь')
+        data = {"current_move": "null", "status": status, "winner": winner}
+        content = JSONRenderer().render(data=data)
+        response.content = content
+        return response
+
     redis_key = 'current_' + str(game.id)
     print(redis_key)
     current_move = redis.get(name=redis_key)
-    response.content = current_move
+
+    data = {"current_move": current_move, "status": status, "winner": winner}
+    content = JSONRenderer().render(data=data)
+    response.content = content
+
+    # response.content = current_move
     print("current_move", current_move)
     return response
 

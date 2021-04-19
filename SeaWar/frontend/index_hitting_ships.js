@@ -90,12 +90,17 @@ var check_move = function(e){
                     console.log("responce", data);
                     console.log("type", typeof(data));
                     console.log("user_id", USER);
-                    if (USER == +data){
-                        console.log('выстрел');
+                    let data_cuurent_move = JSON.parse(data);
+                    if (+data_cuurent_move['current_move'] == USER){
+                        console.log("type data_cuurent_move['status']", typeof(data_cuurent_move['status']) );
+                         console.log("type data_cuurent_move['status']", data_cuurent_move['status']);
                         $("#info").text("Выстрел");
                         fire(e);
-                        setTimeout(get_set_shots_enemy_user, 1000);
-                        
+                        // setTimeout(get_set_shots_enemy_user, 1000);
+                    }
+                    else if (+data_cuurent_move['status'] == 0){
+                        $("#info").text("Игра Окончена: Победитель - " + data_cuurent_move['winner']);
+
                     }
                     else{
                         $("#info").text("Ходит противник");
@@ -138,10 +143,10 @@ var get_set_shots_enemy_user = function(){
 
 var arrShots =[];
 $("#check").on('click', get_set_shots_enemy_user);
+
+
     
- var fire = function ( e ) {
-
-
+var fire = function ( e ) {
     var coordinate = e.target.id;
     console.log(coordinate);
 
@@ -163,8 +168,6 @@ $("#check").on('click', get_set_shots_enemy_user);
     $(".first #"+coordinate).css('background-image', "url('image/hourglass.png')");
     soundClick();
      
-     
-     
       $.ajax({
                 url: HOST + "/api/v1/ajax/faire/",
                 type: "POST",
@@ -184,6 +187,10 @@ $("#check").on('click', get_set_shots_enemy_user);
                     else if (hitResult['hit_result'] == 'ranen' || hitResult['hit_result'] == 'killed'){
                         $(".first #"+coordinate).css('background-image', "url('image/bum.png')");
                          $("#info").text("Капитан твой выстрел");
+                    }
+                    else if (hitResult['hit_result'] == 'win'){
+                        $(".first #"+coordinate).css('background-image', "url('image/bum.png')");
+                        $("#info").text("Ура победа: Победитель: " + hitResult['winner']);
                     }
                 },
             });

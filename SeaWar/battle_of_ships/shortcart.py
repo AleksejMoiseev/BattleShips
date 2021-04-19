@@ -95,6 +95,7 @@ def get_enemy_ships(user_id):
 def save_enemy_ship(ships_json, user_id):
     game, enemy_user_id = get_enemy(user_id=user_id)
     enemy_user_id.ship = ships_json
+    enemy_user_id.save()
 
 
 def get_array_ships(list_json_objects):
