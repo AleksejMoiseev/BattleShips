@@ -36,6 +36,7 @@ from battle_of_ships.shortcart import (
 
 CURRENT_USER_KEY_PREFIX = 'current:{}'
 SET_CONTAINS_SHOTS_USER_KEY_PREFIX = 'set'
+MAXIMUM_ALLOWED_NUMBER_OF_PLAYERS = 2
 
 
 class GameView(generics.RetrieveAPIView):
@@ -61,11 +62,11 @@ class UserCreateView(generics.ListCreateAPIView):
         data_request = request.data
         game_id = data_request['game']
         print(game_id)
-        game = Game.objects.get(id=game_id)
-        users = User.objects.select_for_update().filter(game=game)
+        users = User.objects.select_for_update().filter(game_id=game_id)
         with transaction.atomic():
-            if len(users) >= 2:
-                return Response(status=status.HTTP_403_FORBIDDEN)
+            if len(users) >= MAXIMUM_ALLOWED_NUMBER_OF_PLAYERS:
+                data_responce = JSONRenderer().render(data={"errors": "Потомушта нельзя больше двух игроковб вообщето"})
+                return Response(status=status.HTTP_403_FORBIDDEN, data=data_responce)
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)

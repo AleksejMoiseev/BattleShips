@@ -63,15 +63,13 @@ var style_button;
 var data_deck_name;
 var e_target;
 
-var ability_create = function(number_deck)
-{
+var ability_create = function(number_deck){
             if (number_of_ships[number_deck] <= 0) return false;
             return true;
 }
 
 
-var get_deck = function(e)
-{
+var get_deck = function(e){
     if( SWITCH_BUTTON)
     {
         data_deck_name = e.target.getAttribute("data-deck-name");
@@ -106,8 +104,8 @@ var check_ban_place = function(index1, data_pole){
         
          for ( let i = 0; i < list_move.length; i++)
          {
-             if ( list_move[i] < 138 ||  list_move[i] > 246)
-                    list_move [i] = 137;
+             if ( list_move[i] < 140 ||  list_move[i] > 248)
+                    list_move [i] = 139;
              if (arrDiv[list_move[i]].getAttribute('data-pole') != 2)
                     arrDiv[list_move[i]].setAttribute('data-pole', data_pole);
          }
@@ -173,10 +171,11 @@ var givePlaceShips = function(e){
         lenghtShip += 1;
     }   
  }
+
     
 var get_funcm = function(){
-  info.innerText = "Установите координаты корабля на игровом поле";
-  for ( let i = 138; i < 247; i++ ){
+  info.innerText = "Установите координаты корабля на игровом";
+  for ( let i = 140; i < 249; i++ ){
     if (arrDiv[i].id != "numeral"){
        arrDiv[i].setAttribute("data-pole", 1);
        arrDiv[i].setAttribute("data-index", i);

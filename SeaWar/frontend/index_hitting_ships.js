@@ -32,10 +32,17 @@ function soundClickPast() {
     audio.src = 'media/soundPast.mp3';
     audio.autoplay = true;
 }
+
+function soundClickBoom() {
+    var audio = new Audio();
+    audio.src = 'media/vzryv.mp3';
+    audio.autoplay = true;
+}
+
 function output ( value ){
     if ( value == 'killed') {
         info.innerText = "Убит";
-        soundClick();
+        soundClickBoom();
     }
     else if ( value == 'ranen') {
         info.innerText = wound();
@@ -77,30 +84,30 @@ var check_move = function(e){
 
    
 
-    $.ajax({
-                url: HOST + "/api/v1/ajax/get_current_move/",
-                type: "GET",
-                success: function(data, output, status){
-                    console.log("responce", data);
-                    console.log("type", typeof(data));
-                    console.log("user_id", USER);
-                    let data_cuurent_move = JSON.parse(data);
-                    if (+data_cuurent_move['current_move'] == USER){
-                        console.log("type data_cuurent_move['status']", typeof(data_cuurent_move['status']) );
-                         console.log("type data_cuurent_move['status']", data_cuurent_move['status']);
-                        $("#info").text("Выстрел");
-                        fire(e);
-                        // setTimeout(get_set_shots_enemy_user, 1000);
-                    }
-                    else if (+data_cuurent_move['status'] == 0){
-                        $("#info").text("Игра Окончена: Победитель - " + data_cuurent_move['winner']);
+        $.ajax({
+                    url: HOST + "/api/v1/ajax/get_current_move/",
+                    type: "GET",
+                    success: function(data, output, status){
+                        console.log("responce", data);
+                        console.log("type", typeof(data));
+                        console.log("user_id", USER);
+                        let data_cuurent_move = JSON.parse(data);
+                        if (+data_cuurent_move['current_move'] == USER){
+                            console.log("type data_cuurent_move['status']", typeof(data_cuurent_move['status']) );
+                             console.log("type data_cuurent_move['status']", data_cuurent_move['status']);
+                            $("#info").text("Выстрел");
+                            fire(e);
+                            // setTimeout(get_set_shots_enemy_user, 1000);
+                        }
+                        else if (+data_cuurent_move['status'] == 0){
+                            $("#info").text("Игра Окончена: Победитель - " + data_cuurent_move['winner']);
 
-                    }
-                    else{
-                        $("#info").text("Ходит противник");
-                    }
-                },
-            });
+                        }
+                        else{
+                            $("#info").text("Ходит противник");
+                        }
+                    },
+                });
 
 }
 
@@ -109,18 +116,13 @@ var check_move = function(e){
 
 var get_set_shots_enemy_user = function(){
 
-     $.ajax({
+        $.ajax({
                 url: HOST + "/api/v1/ajax/get_shots_enemy/",
                 type: "GET",
                 success: function(data, output, status){
-                    // console.log("responce", data);
                     let set_enemy = JSON.parse(data);
-                    // console.log(set_enemy);
-                    // console.log(typeof(data));
-                    // console.log(typeof(set_enemy));
                     let sessionStoragUserId = sessionStorage.getItem('shots_enemy');
                     let arrB = sessionStorage.getItem(sessionStoragUserId);
-                    // console.log("!!!!!arrB", arrB);
                     let difference = set_enemy.filter(x => !arrB.includes(x));
                     console.log(difference);
                     if ( difference != 0){
@@ -146,7 +148,7 @@ var fire = function ( e ) {
     $(".first #"+coordinate).css('background-image', "url('image/hourglass.png')");
     soundClick();
      
-      $.ajax({
+        $.ajax({
                 url: HOST + "/api/v1/ajax/faire/",
                 type: "POST",
                 data: {
@@ -159,12 +161,11 @@ var fire = function ( e ) {
                     console.log(hitResult);
                     if (hitResult['hit_result'] == 'mimo'){
                         $(".first #"+coordinate).css('background-image', "url('image/krest.png')");
-                         $("#info").text("Стреляет противник");
-
+                        $("#info").text("Стреляет противник");
                     }
                     else if (hitResult['hit_result'] == 'ranen' || hitResult['hit_result'] == 'killed'){
                         $(".first #"+coordinate).css('background-image', "url('image/bum.png')");
-                         $("#info").text("Капитан твой выстрел");
+                        $("#info").text("Капитан твой выстрел");
                     }
                     else if (hitResult['hit_result'] == 'win'){
                         $(".first #"+coordinate).css('background-image', "url('image/bum.png')");
@@ -196,7 +197,5 @@ for ( let i = 16; i < 125; i++ ){
     if (arrDiv[i].id != "numeral"){
         // arrDiv[i].onclick = fire;
         arrDiv[i].onclick = check_move;
-
-    }
-    
+    } 
 }
