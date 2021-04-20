@@ -1,16 +1,15 @@
- var  cookie_all = document.cookie.split(";");
+var  cookie_all = document.cookie.split(";");
 
 let get_user_cookie = function(){
-    let cookie_id;
+  let cookie_id;
 
-   console.log(cookie_all);
 
-    for (let i = 0; i < cookie_all.length; i++){
-      if ( cookie_all[i].split('=')[0].replace( /\s/g, '') == 'id'){
+
+  for (let i = 0; i < cookie_all.length; i++){
+    if ( cookie_all[i].split('=')[0].replace( /\s/g, '') == 'id'){
         
         cookie_id = cookie_all[i].split('=')[1];
       }
-      console.log(cookie_all[i].split('=')[0]);
     }
     return +cookie_id
 }
@@ -49,56 +48,55 @@ var harborArr = [
 
     ];
 
-    var VALUE_DECK_SHIP = 0;
-    var SWITCH_BUTTON = true;
-    var arrShipsCoordunate = [];
-    var tempArr =[];
-    var number_of_ships = {
-        "one_deck": 2,
-        "two_deck": 1,
-        "three_deck": 1,
-        "four": 1,
-    }
+var VALUE_DECK_SHIP = 0;
+var SWITCH_BUTTON = true;
+var arrShipsCoordunate = [];
+var tempArr =[];
+var number_of_ships = {
+    "one_deck": 2,
+    "two_deck": 1,
+    "three_deck": 1,
+    "four": 1,
+}
     
-    var style_button;
-    var data_deck_name;
-    var e_target;
+var style_button;
+var data_deck_name;
+var e_target;
 
-    var ability_create = function(number_deck)
+var ability_create = function(number_deck)
+{
+            if (number_of_ships[number_deck] <= 0) return false;
+            return true;
+}
+
+
+var get_deck = function(e)
+{
+    if( SWITCH_BUTTON)
     {
-                if (number_of_ships[number_deck] <= 0) return false;
-                return true;
-    }
-
-
-    var get_deck = function(e)
-    {
-        if( SWITCH_BUTTON)
+        data_deck_name = e.target.getAttribute("data-deck-name");
+        e_target = e.target;
+       
+        style_button = e_target.style;
+        if (ability_create(data_deck_name))
         {
-            data_deck_name = e.target.getAttribute("data-deck-name");
-            e_target = e.target;
-           
-            style_button = e_target.style;
-            if (ability_create(data_deck_name))
-            {
-                VALUE_DECK_SHIP = e.target.getAttribute('data-deck');
-                style_button.backgroundColor="red";
-                e_target.innerHTML = (number_of_ships[data_deck_name] - 1) + ' кораблей';
-                if ((number_of_ships[data_deck_name] - 1) == 0)
-                         style_button.backgroundColor="grey";
-                lenghtShip = 0;
-            }
-
+            VALUE_DECK_SHIP = e.target.getAttribute('data-deck');
+            style_button.backgroundColor="red";
+            e_target.innerHTML = (number_of_ships[data_deck_name] - 1) + ' кораблей';
+            if ((number_of_ships[data_deck_name] - 1) == 0)
+                     style_button.backgroundColor="grey";
+            lenghtShip = 0;
         }
 
-            return false;
     }
 
-    var button = $("button").bind('click', get_deck);
+        return false;
+}
+
+var button = $("button").bind('click', get_deck);
     
 
-    var check_ban_place = function(index1, data_pole)
-    {
+var check_ban_place = function(index1, data_pole){
         let index = +index1;
          let list_move = [
              index + 1, index - 1, index + 11, index - 11,
@@ -115,59 +113,56 @@ var harborArr = [
          }
     }
 
-    let lenghtShip = 0;
-    var givePlaceShips = function(e)
-    {
-        SWITCH_BUTTON = false;
-        if ( lenghtShip >= VALUE_DECK_SHIP)
-        {
-            if ( VALUE_DECK_SHIP == 0) 
-            {
-                info.innerText="Капитан выбери корабль";
-                SWITCH_BUTTON = true;
-                return;
-            }
-            
-            info.innerText = "установка " + VALUE_DECK_SHIP + "-х палубного корабля " + "закончена";
-            
-            if ( arrShipsCoordunate.length != 0 )
-            {
-                 harborArr.push( new Ship(arrShipsCoordunate));
-                 number_of_ships[data_deck_name] = number_of_ships[data_deck_name] - 1;
-            }
-           
-            for ( let i = 0; i < tempArr.length; i++)
-            {              
-                check_ban_place(tempArr[i], 2);          
-            }
-            arrShipsCoordunate = [];
-            SWITCH_BUTTON = true;
-            return false;
-        }
-             var coordinate = e.target.id;
+
+let lenghtShip = 0;
+var givePlaceShips = function(e){
+  SWITCH_BUTTON = false;
         
-        if
-        (
-            arrShipsCoordunate.length !=0 &&
-            e.target.getAttribute("data-pole") == 3
-        )
-        {
-            e.target.style.backgroundImage= "url('image/shipbig.png')";
-            e.target.setAttribute("data-pole", 2);
-            data_index = e.target.getAttribute("data-index");
-            tempArr.push(data_index);
-            arrShipsCoordunate.push(coordinate);
-            check_ban_place(data_index, 3);
-            lenghtShip += 1;
-        }
+  if ( lenghtShip >= VALUE_DECK_SHIP){
+    if ( VALUE_DECK_SHIP == 0) {
+      info.innerText="Капитан выбери корабль";
+      SWITCH_BUTTON = true;
+      return;
+    }
+    
+    info.innerText = "установка " + VALUE_DECK_SHIP + "-х палубного корабля " + "закончена";
+    
+    if ( arrShipsCoordunate.length != 0 ){
+       harborArr.push( new Ship(arrShipsCoordunate));
+       number_of_ships[data_deck_name] = number_of_ships[data_deck_name] - 1;
+    }
+   
+    for ( let i = 0; i < tempArr.length; i++){              
+      check_ban_place(tempArr[i], 2);          
+    }
+    arrShipsCoordunate = [];
+    SWITCH_BUTTON = true;
+    return false;
+  }
+
+
+ var coordinate = e.target.id;
+        
+  if(
+      arrShipsCoordunate.length !=0 &&
+      e.target.getAttribute("data-pole") == 3
+  ){
+      e.target.style.backgroundImage= "url('image/shipbig.png')";
+      e.target.setAttribute("data-pole", 2);
+      data_index = e.target.getAttribute("data-index");
+      tempArr.push(data_index);
+      arrShipsCoordunate.push(coordinate);
+      check_ban_place(data_index, 3);
+      lenghtShip += 1;
+  }
         
         
                  
-    if ( 
-          e.target.getAttribute("data-pole") == 1 && 
-          e.target.getAttribute("data-pole") != 2 && 
-          arrShipsCoordunate.length == 0
-       )
+  if ( 
+        e.target.getAttribute("data-pole") == 1 && 
+        e.target.getAttribute("data-pole") != 2 && 
+        arrShipsCoordunate.length == 0
+     )
     {
         e.target.style.backgroundImage= "url('image/shipbig.png')";
         e.target.setAttribute("data-pole", 2);
@@ -216,9 +211,37 @@ var check_install_ships = function(){
   return false;
 }
 
+
+var get_name_user_next_move = function(){
+
+
+
+    $.ajax({
+                url: HOST + "/api/v1/ajax/get_current_move/",
+                type: "GET",
+                success: function(data, output, status){
+                    console.log("responce", data);
+                    console.log("type", typeof(data));
+                    console.log("user_id", USER);
+
+
+
+                    let data_next_move = JSON.parse(data);
+                    console.log(data_next_move)
+                    console.log("type", typeof(+data_next_move['current_move']))
+                    if (+data_next_move['current_move'] == USER){
+                        $("#info").text("Ходи Капитан");
+                      }
+                    else{
+                      $("#info").text("Сейчас выстрел противника");
+                    }
+                },
+
+            });
+}
+
+
 let ready = function(){
-  console.log("check_install_ships()", check_install_ships());
-  console.log(JSON.stringify(harborArr));
   
   if (check_install_ships()){
     

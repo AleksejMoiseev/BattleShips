@@ -46,12 +46,6 @@ function output ( value ){
         soundClickPast();
     }
 }
-//function Ship(coordinates){
-//    this.coordinates = coordinates;
-//    this.hit_coordinates = [];
-//}
-
-
 
 
 var show_hit = function(coordinate){
@@ -142,28 +136,12 @@ var get_set_shots_enemy_user = function(){
 }
 
 var arrShots =[];
-$("#check").on('click', get_set_shots_enemy_user);
-
-
-    
+   
 var fire = function ( e ) {
     var coordinate = e.target.id;
-    console.log(coordinate);
-
-    // возможен бесконечный цикл!!!!
-
     do{
         $("#info").text("Капитан твой выстрел");
     }while (contains ( arrShots, coordinate))
-
-
-
-
-
-
-    // if (contains ( arrShots, coordinate)) {
-    //     return;
-    // }
     arrShots.push(coordinate);
     $(".first #"+coordinate).css('background-image', "url('image/hourglass.png')");
     soundClick();
@@ -194,25 +172,8 @@ var fire = function ( e ) {
                     }
                 },
             });
-     
-    // for ( var i = 0; i < harborArr.length; i++ ){
-    //     var ship = harborArr[i];
-    //     var hit_result = check_hit(ship, coordinate);
-    //     output(hit_result);
-    //     if ( hit_result == "ranen" || hit_result == "killed" ){
-    //          e.target.style.backgroundImage = "url('image/scelet.png')";
-    //          break;
-    //     } 
-    //     else{
-    //          e.target.style.backgroundImage = "url('image/krest.png')";
-    //     }
-    // }
+   
 }
-
-
-
-
-
 
 function check_hit(ship, coordinate) {
     if (!(contains ( ship.coordinates, coordinate))) {
@@ -230,19 +191,12 @@ function check_hit(ship, coordinate) {
     return 'ranen'
 }
     
-    
-//    var harborArr = [
-////    new Ship (['A1']),
-////    new Ship (['A3', 'A4']),
-////    new Ship (['A9', 'B9', 'C9'])
-//    ];
-   
-//    var arrDiv = document.querySelectorAll ('div');
-    for ( let i = 16; i < 125; i++ ){
-        if (arrDiv[i].id != "numeral"){
-            // arrDiv[i].onclick = fire;
-            arrDiv[i].onclick = check_move;
 
-        }
-        
+for ( let i = 16; i < 125; i++ ){
+    if (arrDiv[i].id != "numeral"){
+        // arrDiv[i].onclick = fire;
+        arrDiv[i].onclick = check_move;
+
     }
+    
+}

@@ -5,6 +5,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from django.views.generic import ListView
 from rest_framework.decorators import api_view
+from django.core.exceptions import ObjectDoesNotExist
 
 
 from battle_of_ships.forms import CreateUserForm
@@ -88,17 +89,7 @@ class GameDetailView(APIView):
 
 class UserDestroy(generics.RetrieveDestroyAPIView):
     serializer_class = UserListSerializers
-    queryset = u.objects.all()
-
-
-
-
-# class CreateUserAndGame(CreateView):
-#     form_class = CreateUserForm
-#     template_name = "my_server/fronted/auth.html"
-#     context_object_name = 'name_user'
-#
-#
+    queryset = User.objects.all()
 
 
 @method_decorator(csrf_exempt, name='dispatch')
@@ -112,6 +103,7 @@ class CreateUserAndGame(generics.CreateAPIView):
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
         id_game = serializer.data['id']
+        print('id_Game', id_game)
         game = Game.objects.get(id=id_game)
         created_user = User.objects.create(name=name, game=game)
         headers = self.get_success_headers(serializer.data)

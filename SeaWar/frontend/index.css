@@ -31,7 +31,7 @@
     }
     .first, .second {
         position: absolute;
-        top: 25%;
+        top: 30%;
     }
     .first {
         left: 25px;
@@ -39,29 +39,23 @@
     .second {
         right: 25px;
     }
-    h1{
-        text-align-last: center;
-    }
-/*
-    .info{
-        width: 10px;
-        height: 100px;
-        float: right;
-        padding-right: 20px;
-        margin-top: 60px;
-        margin-right: 46px;
-        padding-left: 2px;
-        background-image: url()
-        
-    }
-*/
+
     .img{
         width: 150px;
         height: 225px;
-        position: absolute;
+        /*position: absolute;*/
         padding: 10px;
         margin-left: 12px;
+        float: left;
     }
+
+    .message{
+       
+        width: : 600px;
+
+
+    }
+
     #letter{
         display: table-cell;
         color: black;
