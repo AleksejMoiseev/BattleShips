@@ -25,6 +25,7 @@ from django.conf import settings
 from django.views.decorators.csrf import csrf_exempt, csrf_protect
 from django.utils.decorators import method_decorator
 from rest_framework.renderers import JSONRenderer
+from django.db import transaction
 
 from battle_of_ships.shortcart import (
     redis, get_users, next_move, choice_ready_user,
@@ -56,6 +57,15 @@ class UserCreateView(generics.ListCreateAPIView):
         # self.authenticate(request)
         print(request.user)
         print(request.session)
+        print("request data", request.data)
+        data_request = request.data
+        game_id = data_request['game']
+        print(game_id)
+        game = Game.objects.get(id=game_id)
+        users = User.objects.select_for_update().filter(game=game)
+        with transaction.atomic():
+            if len(users) >= 2:
+                return Response(status=status.HTTP_403_FORBIDDEN)
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
