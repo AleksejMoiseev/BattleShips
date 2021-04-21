@@ -16,18 +16,7 @@ from pathlib import Path
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '@h11_8o$ni#b*579z2z-je(!)+5zn4b@zzu1%%+4b^6dk6f7p#'
-
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
-ALLOWED_HOSTS = [
-    'battleships.lo',
-]
 
 
 
@@ -78,15 +67,7 @@ TEMPLATES = [
 WSGI_APPLICATION = 'SeaWar.wsgi.application'
 
 
-# Database
-# https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
-#     }
-# }
 
 DATABASES = {
     'default': {
@@ -138,10 +119,9 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+try:
+    from .local_settings import *
+except ImportError:
+    from .prod_settings import *
 
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:8080",
-    "http://127.0.0.1:8000",
-]
 
-CORS_ALLOW_ALL_ORIGINS = True
