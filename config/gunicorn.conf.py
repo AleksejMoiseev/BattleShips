@@ -1,4 +1,4 @@
-bind = '127.0.0.1:8000'
+bind = '164.90.174.52:8000'
 workers = 3
-user = "user_name"
+user = "alex"
 timeout = 120
