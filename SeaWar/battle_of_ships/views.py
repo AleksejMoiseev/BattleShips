@@ -123,7 +123,7 @@ class CreateUserAndGame(generics.CreateAPIView):
         response.set_cookie(key='id', value=created_user.pk)
         return response
 
-
+@method_decorator(csrf_exempt, name='dispatch')
 class UpdateShip(generics.RetrieveUpdateAPIView):
     serializer_class = UserShipStatusUpdate
     queryset = User.objects.all()
@@ -191,6 +191,7 @@ def faire(request):
     return response
 
 
+@csrf_exempt
 @api_view(['GET'])
 def get_current_move(request):
     user_id = request.COOKIES.get('id')
@@ -218,7 +219,7 @@ def get_current_move(request):
     print("current_move", current_move)
     return response
 
-
+@csrf_exempt
 @api_view(['GET'])
 def get_shots_enemy(request):
     try:
