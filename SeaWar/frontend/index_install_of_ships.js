@@ -15,7 +15,7 @@ let get_user_cookie = function(){
 }
 
 
-const HOST = 'http://battleships.lo';
+const HOST = '';
 var USER = get_user_cookie();
 console.log("USER", USER);
 

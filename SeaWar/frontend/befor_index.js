@@ -1,4 +1,4 @@
-const HOST = 'http://battleships.lo';
+const HOST = '';
 
 
 let create_user_game = function(){
