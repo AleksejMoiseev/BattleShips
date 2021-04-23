@@ -38,6 +38,15 @@ function loadPage(){
             });
 }
 
+var hidden_div_message = function(){
+
+  $(".message").attr('hidden', 'true');
+}
+
+setTimeout(hidden_div_message, 50000);
+
+
+
 
 function Ship(coordinates){
     this.coordinates = coordinates;
