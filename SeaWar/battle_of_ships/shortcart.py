@@ -63,26 +63,19 @@ def choice_ready_user(user_id):
     # all_user_in_game = u.objects.filter(game=user.game)
     game, all_user_in_game = get_users(user_id=user_id)
     for player in all_user_in_game:
-        print("player.status", player.status)
         if player.status != 1:
             return False
         list_ready.append(player.id)
     id_who_move = choice(list_ready)
     redis_key = 'current_' + str(game.id)
-    print(redis_key)
     redis.set(redis_key, id_who_move)
-    print(redis.get(name=redis_key))
     return True
 
 
 def get_enemy(user_id):
-    print("get_enemy", user_id)
     game, all_user_in_game = get_users(user_id=user_id)
     for enemy in all_user_in_game:
-        print("сравнение enemy.id, user_id", int(enemy.id), int(user_id))
         if int(enemy.id) != int(user_id):
-            print(enemy.id != user_id)
-            print('game, enemy', game, enemy )
             return game, enemy
 
 
