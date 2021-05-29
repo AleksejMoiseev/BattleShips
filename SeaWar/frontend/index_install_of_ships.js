@@ -256,9 +256,9 @@ let ready = function(){
                 get_name_user_next_move();
             },
         });
-}
+  }
 
-  setInterval(get_set_shots_enemy_user, 1000);
+  setInterval(get_set_shots_enemy_user, 200);
 }
 
     

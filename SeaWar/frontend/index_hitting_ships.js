@@ -60,9 +60,10 @@ var show_hit = function(coordinate){
     t = ".second #"+coordinate;
 
     for ( var i = 0; i < harborArr.length; i++ ){
+        console.log("Func show_hit ")
         var ship = harborArr[i];
         var hit_result = check_hit(ship, coordinate);
-        output(hit_result);
+//        output(hit_result);
         if ( hit_result == "ranen" || hit_result == "killed" ){
              $(".second #"+coordinate).css('background-image', "url('image/scelet.png')");
              break;
