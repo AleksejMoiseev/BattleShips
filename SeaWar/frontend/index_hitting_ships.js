@@ -20,17 +20,21 @@ function wound (){
    var coordinateWound = messangArr[ randWound ];
    return coordinateWound;
 }
+var col = document.getElementById('V');
+var soundPast = document.getElementById('soundPast');
 
 function soundClick() {
-    var audio = new Audio(); // Создаём новый элемент Audio
-    audio.src = 'media/V.mp3'; // Указываем путь к звуку "клика"
-    audio.autoplay = true; // Автоматически запускаем
+    // var audio = new Audio(); // Создаём новый элемент Audio
+    // audio.src = 'media/V.mp3'; // Указываем путь к звуку "клика"
+    // audio.autoplay = true; // Автоматически запускаем
+    col.play();
     }
 
 function soundClickPast() {
-    var audio = new Audio();
-    audio.src = 'media/soundPast.mp3';
-    audio.autoplay = true;
+    // var audio = new Audio();
+    // audio.src = 'media/soundPast.mp3';
+    // audio.autoplay = true;
+    soundPast.play();   
 }
 
 function soundClickBoom() {
@@ -60,10 +64,9 @@ var show_hit = function(coordinate){
     t = ".second #"+coordinate;
 
     for ( var i = 0; i < harborArr.length; i++ ){
-        console.log("Func show_hit ")
         var ship = harborArr[i];
         var hit_result = check_hit(ship, coordinate);
-//        output(hit_result);
+        output(hit_result);
         if ( hit_result == "ranen" || hit_result == "killed" ){
              $(".second #"+coordinate).css('background-image', "url('image/scelet.png')");
              break;
