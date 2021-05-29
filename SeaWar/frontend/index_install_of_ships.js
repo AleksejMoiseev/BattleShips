@@ -17,11 +17,9 @@ let get_user_cookie = function(){
 
 const HOST = '';
 var USER = get_user_cookie();
-console.log("USER", USER);
 
 var StoragUserIdName = "shots_enemy" + String(USER);
 sessionStorage.setItem('shots_enemy', StoragUserIdName)
-console.log(StoragUserIdName);
 sessionStorage.setItem(StoragUserIdName, []);
 
 
@@ -31,7 +29,6 @@ function loadPage(){
                 url: HOST + "/api/v1/ajax/get_id_game/" + USER + "/",
                 type: "GET",
                 success: function(data, output, status){
-                    console.log("responce", data);
                     $("h1").text(data['game']);
                 },
 
@@ -228,15 +225,7 @@ var get_name_user_next_move = function(){
                 url: HOST + "/api/v1/ajax/get_current_move/",
                 type: "GET",
                 success: function(data, output, status){
-                    console.log("responce", data);
-                    console.log("type", typeof(data));
-                    console.log("user_id", USER);
-
-
-
                     let data_next_move = JSON.parse(data);
-                    console.log(data_next_move)
-                    console.log("type", typeof(+data_next_move['current_move']))
                     if (+data_next_move['current_move'] == USER){
                         $("#info").text("Ходи Капитан");
                       }
@@ -264,7 +253,6 @@ let ready = function(){
                      "id": USER,
             },
             success: function(data, output, status){
-                console.log("request suссessfull", data);
                 get_name_user_next_move();
             },
         });

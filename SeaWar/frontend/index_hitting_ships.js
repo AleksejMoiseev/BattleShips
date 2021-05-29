@@ -57,9 +57,7 @@ function output ( value ){
 
 var show_hit = function(coordinate){
 
-    console.log(harborArr);
     t = ".second #"+coordinate;
-    console.log($(t));
 
     for ( var i = 0; i < harborArr.length; i++ ){
         var ship = harborArr[i];
@@ -88,13 +86,8 @@ var check_move = function(e){
                     url: HOST + "/api/v1/ajax/get_current_move/",
                     type: "GET",
                     success: function(data, output, status){
-                        console.log("responce", data);
-                        console.log("type", typeof(data));
-                        console.log("user_id", USER);
                         let data_cuurent_move = JSON.parse(data);
                         if (+data_cuurent_move['current_move'] == USER){
-                            console.log("type data_cuurent_move['status']", typeof(data_cuurent_move['status']) );
-                             console.log("type data_cuurent_move['status']", data_cuurent_move['status']);
                             $("#info").text("Выстрел");
                             fire(e);
                             // setTimeout(get_set_shots_enemy_user, 1000);
@@ -124,12 +117,9 @@ var get_set_shots_enemy_user = function(){
                     let sessionStoragUserId = sessionStorage.getItem('shots_enemy');
                     let arrB = sessionStorage.getItem(sessionStoragUserId);
                     let difference = set_enemy.filter(x => !arrB.includes(x));
-                    console.log(difference);
                     if ( difference != 0){
                         sessionStorage.setItem(sessionStoragUserId, set_enemy);
                         let coordinate_enemy_shot = difference[0];
-                        console.log(typeof(coordinate_enemy_shot));
-                        console.log("coordinate_enemy_shot", coordinate_enemy_shot)
                         show_hit(coordinate_enemy_shot);
                     }
             
@@ -155,10 +145,7 @@ var fire = function ( e ) {
                         "coordinate": coordinate,
                        },
                 success: function(data, output, status){
-                    console.log("request suссessfull", data);
-                    console.log('type data', typeof(data));
                     let hitResult = JSON.parse(data);
-                    console.log(hitResult);
                     if (hitResult['hit_result'] == 'mimo'){
                         $(".first #"+coordinate).css('background-image', "url('image/krest.png')");
                         $("#info").text("Стреляет противник");

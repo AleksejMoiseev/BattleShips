@@ -259,7 +259,6 @@ function output ( value ){
 var img = $("img");
 var USER = 10;
 
-console.log(JSON.stringify(harborArr));
     let ready = function(){
         
         $.ajax({
@@ -270,7 +269,6 @@ console.log(JSON.stringify(harborArr));
                         "status": 1,
                        },
                 success: function(data, output, status){
-                    console.log("request suссessfull", data);
                 },
             });
     }
@@ -278,7 +276,6 @@ console.log(JSON.stringify(harborArr));
     
 
 img.on("click", ready);
-console.log("headers",headers);
 
 
 
