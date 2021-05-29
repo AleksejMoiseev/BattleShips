@@ -80,8 +80,6 @@ var show_hit = function(coordinate){
 var check;
 var check_move = function(e){
 
-   
-
         $.ajax({
                     url: HOST + "/api/v1/ajax/get_current_move/",
                     type: "GET",

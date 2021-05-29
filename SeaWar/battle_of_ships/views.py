@@ -135,7 +135,7 @@ class UpdateShip(generics.RetrieveUpdateAPIView):
             # If 'prefetch_related' has been applied to a queryset, we need to
             # forcibly invalidate the prefetch cache on the instance.
             instance._prefetched_objects_cache = {}
-
+        choice_ready_user(user_id=user_id)
         return Response(serializer.data, status=200)
 
 
@@ -162,6 +162,7 @@ def faire(request):
         return response
     if hit_result == 'mimo':
         next_move_user, game = next_move(user_id=user_id)
+        redis_key = 'current_' + str(game.id)
 
     redis_key_set_shots = SET_CONTAINS_SHOTS_USER_KEY_PREFIX + str(game.id) + str(user_id)
 
