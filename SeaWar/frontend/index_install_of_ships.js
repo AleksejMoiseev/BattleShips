@@ -258,7 +258,7 @@ let ready = function(){
         });
   }
 
-  setInterval(get_set_shots_enemy_user, 1200);
+  setInterval(get_set_shots_enemy_user, 200);
 }
 
     
