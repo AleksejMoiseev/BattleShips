@@ -1,8 +1,5 @@
-from django.conf.urls.static import static
-from django.conf import settings
-from django.urls import include, path
-from django.contrib import admin
 from django.urls import path
+
 from battle_of_ships.views import *
 
 urlpatterns = [

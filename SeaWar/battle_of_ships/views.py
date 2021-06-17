@@ -1,38 +1,47 @@
-from django.shortcuts import render
+import logging
+
+from django.db import transaction
 from django.http import HttpResponse
+from django.utils.decorators import method_decorator
+from django.views.decorators.csrf import csrf_exempt
 from rest_framework import generics, status
+from rest_framework.decorators import api_view
+from rest_framework.permissions import AllowAny
+from rest_framework.renderers import JSONRenderer
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from django.views.generic import ListView
-from rest_framework.decorators import api_view
-from django.core.exceptions import ObjectDoesNotExist
 
-
-from battle_of_ships.forms import CreateUserForm
 from battle_of_ships.serializers import *
-from battle_of_ships.models import User
-from battle_of_ships.models import Game
-from rest_framework.permissions import AllowAny
-from django.views.generic import CreateView
-from rest_framework.authtoken.models import Token
-
-
-from rest_framework import authentication
-from rest_framework import exceptions
-
-from django.conf import settings
-
-from django.views.decorators.csrf import csrf_exempt, csrf_protect
-from django.utils.decorators import method_decorator
-from rest_framework.renderers import JSONRenderer
-from django.db import transaction
-
 from battle_of_ships.shortcart import (
-    redis, get_users, next_move, choice_ready_user,
+    redis, next_move, choice_ready_user,
     get_enemy, DoesNotUser, get_enemy_ships, get_array_ships,
     check_hit, ships_to_json, save_enemy_ship,
     check_winner,
 )
+
+logger = logging.getLogger(__name__)
+
+logger.setLevel(level=logging.DEBUG)
+
+log_handlers = {
+    "file_debug": logging.FileHandler('/home/alex/Documents/Projects/battleShips/env2/debug.log', mode="w"),
+    "file_info": logging.FileHandler('/home/alex/Documents/Projects/battleShips/env2/debug.log', mode="w"),
+}
+log_handlers["file_debug"].setLevel(logging.DEBUG)
+log_handlers["file_info"].setLevel(logging.INFO)
+
+log_formatters = {
+    "file_debug": logging.Formatter("[%(levelname)s]@[%(asctime)s]: %(message)s"),
+    "file_info": logging.Formatter("[%(levelname)s]@[%(asctime)s]: %(message)s"),
+}
+
+for k, v in log_formatters.items():
+    print(k, v)
+    log_handlers[k].setFormatter(v)
+
+logger.addHandler(log_handlers['file_debug'])
+logger.addHandler(log_handlers["file_info"])
+
 
 CURRENT_USER_KEY_PREFIX = 'current:{}'
 SET_CONTAINS_SHOTS_USER_KEY_PREFIX = 'set'
@@ -55,9 +64,11 @@ class UserCreateView(generics.ListCreateAPIView):
     queryset = User.objects.all()
 
     def create(self, request, *args, **kwargs):
-        # self.authenticate(request)
+        logger.info(msg="Начало функции создание игры второго игрока create")
         data_request = request.data
         game_id = data_request['game']
+        logger.debug(msg=f"value game={game_id}")
+
         users = User.objects.select_for_update().filter(game_id=game_id)
         with transaction.atomic():
             if len(users) >= MAXIMUM_ALLOWED_NUMBER_OF_PLAYERS:
@@ -68,9 +79,12 @@ class UserCreateView(generics.ListCreateAPIView):
         self.perform_create(serializer)
         headers = self.get_success_headers(serializer.data)
         id_user = serializer.data['id']
+        logger.debug(msg=f"value id_user = {id_user}")
         headers['id'] = id_user
         response = Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
         response.set_cookie(key='id', value=id_user)
+        logger.info(msg="cookies set")
+        logger.info(msg=f"Окончание создания второго игрока")
         return response
 
 
@@ -105,18 +119,27 @@ class CreateUserAndGame(generics.CreateAPIView):
     queryset = Game.objects.all()
 
     def create(self, request, *args, **kwargs):
+        logger.info(msg=f"Создание первого игрока")
         name = request.data['name']
+        logger.debug(msg=f'value name user = {name}')
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
         id_game = serializer.data['id']
+        logger.debug(msg=f'value id_game = {id_game}')
         game = Game.objects.get(id=id_game)
+        logger.debug(msg=f'value game = {game}')
         created_user = User.objects.create(name=name, game=game)
+        logger.debug(msg=f'value created_user = {name}')
         headers = self.get_success_headers(serializer.data)
+        logger.debug(msg=f'value name user = {name}')
         headers['id'] = created_user.pk
+        logger.debug(msg=f'value name user = {name}')
         response = Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
         response.set_cookie(key='id', value=created_user.pk)
+        logger.info(f'Конец создания первого игрока')
         return response
+
 
 @method_decorator(csrf_exempt, name='dispatch')
 class UpdateShip(generics.RetrieveUpdateAPIView):
@@ -125,6 +148,7 @@ class UpdateShip(generics.RetrieveUpdateAPIView):
 
     def update(self, request, *args, **kwargs):
         user_id = request.COOKIES.get('id')
+        logger.debug(msg=f'value user_id = {user_id}')
         partial = kwargs.pop('partial', False)
         instance = self.get_object()
         serializer = self.get_serializer(instance, data=request.data, partial=partial)
@@ -135,7 +159,11 @@ class UpdateShip(generics.RetrieveUpdateAPIView):
             # If 'prefetch_related' has been applied to a queryset, we need to
             # forcibly invalidate the prefetch cache on the instance.
             instance._prefetched_objects_cache = {}
-        choice_ready_user(user_id=user_id)
+        is_ready = choice_ready_user(user_id=user_id)
+        logger.debug(msg=f'состояние готовности {is_ready}')
+        if not is_ready:
+            logger.info('Один из игроков не готов, возвращаем st=204')
+            return Response(status=204)
         return Response(serializer.data, status=200)
 
 
@@ -203,6 +231,7 @@ def get_current_move(request):
 def get_shots_enemy(request):
     try:
         user_id = request.COOKIES.get('id')
+        logger.debug(msg=f'value user_id {user_id}')
         if user_id == None:
             raise DoesNotUser
     except DoesNotUser:

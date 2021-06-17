@@ -253,12 +253,14 @@ let ready = function(){
                      "id": USER,
             },
             success: function(data, output, status){
-                get_name_user_next_move();
+                if ( status.status==204 ){ $("#info").text("Ждем установку кораблей противникаб пробуйте позже"); }
+
+                if ( status.status==200 ){ get_name_user_next_move(); }
             },
         });
   }
 
-  setInterval(get_set_shots_enemy_user, 200);
+  setInterval(get_set_shots_enemy_user, 2000);
 }
 
     

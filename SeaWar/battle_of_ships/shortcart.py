@@ -2,9 +2,10 @@
 helper
 """
 from random import choice
+
 import redis as redis_client
+
 from battle_of_ships.models import User
-from rest_framework import exceptions
 
 redis = redis_client.Redis(host='localhost', port=6379, db=0)
 

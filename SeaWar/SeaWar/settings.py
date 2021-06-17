@@ -84,6 +84,16 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
+DEBUG = True
+LOGGING_CONFIG = None
+
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+
+}
+
 
 
 # Internationalization
