@@ -11,6 +11,7 @@ from rest_framework.renderers import JSONRenderer
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+from SeaWar.settings import MAXIMUM_ALLOWED_NUMBER_OF_PLAYERS
 from battle_of_ships.serializers import *
 from battle_of_ships.shortcart import (
     redis, next_move, choice_ready_user,
@@ -19,7 +20,7 @@ from battle_of_ships.shortcart import (
     check_winner,
 )
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger('custom')
 
 logger.setLevel(level=logging.DEBUG)
 
@@ -45,7 +46,7 @@ logger.addHandler(log_handlers["file_info"])
 
 CURRENT_USER_KEY_PREFIX = 'current:{}'
 SET_CONTAINS_SHOTS_USER_KEY_PREFIX = 'set'
-MAXIMUM_ALLOWED_NUMBER_OF_PLAYERS = 2
+
 
 
 class GameView(generics.RetrieveAPIView):
@@ -147,6 +148,7 @@ class UpdateShip(generics.RetrieveUpdateAPIView):
     queryset = User.objects.all()
 
     def update(self, request, *args, **kwargs):
+        logger.info('Пытаемся изменить корабли')
         user_id = request.COOKIES.get('id')
         logger.debug(msg=f'value user_id = {user_id}')
         partial = kwargs.pop('partial', False)
@@ -164,6 +166,7 @@ class UpdateShip(generics.RetrieveUpdateAPIView):
         if not is_ready:
             logger.info('Один из игроков не готов, возвращаем st=204')
             return Response(status=204)
+        logger.info('Все готовы, возвращаем st=200')
         return Response(serializer.data, status=200)
 
 
@@ -196,6 +199,7 @@ def faire(request):
 
     redis.sadd(redis_key_set_shots, coordinate)
     data = {"coordinate": coordinate, "hit_result": hit_result}
+    logger.debug(msg=f"Результат выстрела : {data}")
     content = JSONRenderer().render(data=data)
 
     response.content = content
@@ -221,6 +225,7 @@ def get_current_move(request):
     current_move = redis.get(name=redis_key)
 
     data = {"current_move": current_move, "status": status, "winner": winner}
+    logger.debug(msg=f'следующий игрок : {data}')
     content = JSONRenderer().render(data=data)
     response.content = content
 
@@ -231,12 +236,15 @@ def get_current_move(request):
 def get_shots_enemy(request):
     try:
         user_id = request.COOKIES.get('id')
-        logger.debug(msg=f'value user_id {user_id}')
         if user_id == None:
             raise DoesNotUser
     except DoesNotUser:
         return HttpResponse("<h1>Нет USERA</h1>")
+
     game, user_enemy = get_enemy(user_id=user_id)
+    if not user_enemy:
+        logger.debug(msg=f"user_enemy - {user_enemy}")
+        return HttpResponse(status=204)
     redis_key_get_shots = SET_CONTAINS_SHOTS_USER_KEY_PREFIX + str(game.id) + str(user_enemy.id)
     set_shots_enemy = redis.smembers(redis_key_get_shots)
     set_shots_enemy_in_json = JSONRenderer().render(data=set_shots_enemy)

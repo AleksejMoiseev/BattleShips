@@ -17,7 +17,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 
 
-
+MAXIMUM_ALLOWED_NUMBER_OF_PLAYERS = 2
 
 
 # Application definition

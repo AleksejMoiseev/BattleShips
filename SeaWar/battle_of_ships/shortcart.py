@@ -6,9 +6,12 @@ from random import choice
 import redis as redis_client
 
 from battle_of_ships.models import User
+import logging
+
+logger = logging.getLogger('custom')
 
 redis = redis_client.Redis(host='localhost', port=6379, db=0)
-
+from SeaWar.settings import MAXIMUM_ALLOWED_NUMBER_OF_PLAYERS
 
 class Ship:
     def __init__(self, coordinates, hit_coordinates):
@@ -48,23 +51,33 @@ def get_users(user_id):
 
 
 def next_move(user_id):
+    logger.info(msg='Вошли в функцию next_move')
     game, list_users = get_users(user_id=user_id)
+    logger.debug(msg=f"game {game}, list_users {list_users}")
     redis_key = 'current_' + str(game.id)
     id_last_move = redis.get(name=redis_key)
     for player in list_users:
         if player.id != int(id_last_move):
+            logger.debug(msg=f'Следующий игрок {player.id}')
             redis.set(name=redis_key, value=player.id)
+            logger.info(msg='Функция закончена next_move')
             return player.id, game
 
 
 def choice_ready_user(user_id):
+    logger.info(msg='Работает функция choice')
     list_ready = []
     # user = u.objects.get(pk=user_id)
     # game = user.game
     # all_user_in_game = u.objects.filter(game=user.game)
     game, all_user_in_game = get_users(user_id=user_id)
+    logger.debug(msg=f"game-{game}, all_user_in_game -{all_user_in_game}")
+    if len(all_user_in_game) < MAXIMUM_ALLOWED_NUMBER_OF_PLAYERS:
+        return False
     for player in all_user_in_game:
+        logger.debug(msg=f"status player - {player.status}")
         if player.status != 1:
+            logger.debug(msg="return false ")
             return False
         list_ready.append(player.id)
     id_who_move = choice(list_ready)
@@ -75,6 +88,9 @@ def choice_ready_user(user_id):
 
 def get_enemy(user_id):
     game, all_user_in_game = get_users(user_id=user_id)
+    logger.debug(msg=f'all_user_in_game - {all_user_in_game}')
+    if len(all_user_in_game) < MAXIMUM_ALLOWED_NUMBER_OF_PLAYERS:
+        return None, None
     for enemy in all_user_in_game:
         if int(enemy.id) != int(user_id):
             return game, enemy
@@ -91,7 +107,7 @@ def save_enemy_ship(ships_json, user_id):
     enemy_user_id.ship = ships_json
     enemy_user_id.save()
 
-1
+
 def get_array_ships(list_json_objects):
     harborArr = []
     for json_object in list_json_objects:

@@ -111,6 +111,7 @@ var check_move = function(e){
 
 var get_set_shots_enemy_user = function(){
 
+
         $.ajax({
                 url: HOST + "/api/v1/ajax/get_shots_enemy/",
                 type: "GET",
@@ -124,9 +125,10 @@ var get_set_shots_enemy_user = function(){
                         let coordinate_enemy_shot = difference[0];
                         show_hit(coordinate_enemy_shot);
                     }
-            
+
                 },
             });
+
 }
 
 var arrShots =[];

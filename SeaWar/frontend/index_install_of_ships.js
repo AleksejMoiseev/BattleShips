@@ -21,6 +21,7 @@ var USER = get_user_cookie();
 var StoragUserIdName = "shots_enemy" + String(USER);
 sessionStorage.setItem('shots_enemy', StoragUserIdName)
 sessionStorage.setItem(StoragUserIdName, []);
+sessionStorage.setItem('ships_installed', false)
 
 
 function loadPage(){
@@ -208,9 +209,15 @@ var headers  = {
 
 var check_install_ships = function(){
 
+    if (! sessionStorage.getItem('ships_installed')){
+        console.log(sessionStorage.getItem('ships_installed'));
+        return false
+    }
+
   if (number_of_ships['one_deck'] == 0 && 
     number_of_ships['two_deck'] == 0 && 
     number_of_ships['three_deck'] == 0 && number_of_ships['four'] == 0 ){
+    sessionStorage.setItem('ships_installed', true)
     return true;
   }
   return false;
@@ -255,12 +262,15 @@ let ready = function(){
             success: function(data, output, status){
                 if ( status.status==204 ){ $("#info").text("Ждем установку кораблей противникаб пробуйте позже"); }
 
-                if ( status.status==200 ){ get_name_user_next_move(); }
+                if ( status.status==200 ){
+                    get_name_user_next_move();
+                    tameID = setInterval(get_set_shots_enemy_user, 100);
+                }
             },
         });
   }
 
-  setInterval(get_set_shots_enemy_user, 2000);
+
 }
 
     
