@@ -30,7 +30,7 @@ def harbor(ship_1, ship_2, ship_3):
 
 
 @pytest.mark.parametrize('position, hit_coordinate, faire, result', [
-    ([], ['A1'], 'A1', 'killed'),
+    (['A1'], [], 'A1', 'killed'),
     (['A1', 'H7'], ['A1'], 'K5', 'mimo'),
     (['A1', 'H7', "k5"], ['A1'], 'K5', 'ranen')
     ])
@@ -39,12 +39,7 @@ def test_check_hit(position, hit_coordinate, faire, result):
 
 
 def test_killed(ship_2, ship_3):
-    print(ship_2.coordinates)
     assert ship_2.coordinates == ['A1', 'H7']
     assert ship_2.hit_coordinates == ['A1', 'H7']
     assert ship_2.killed()
     assert ship_3.killed() == False
-
-
-def test_check_winner(harbor):
-    assert check_winner(arr_ships=harbor) == False

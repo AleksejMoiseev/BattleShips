@@ -1,4 +1,5 @@
 import logging
+from pathlib import Path
 
 from django.db import transaction
 from django.http import HttpResponse
@@ -20,13 +21,15 @@ from battle_of_ships.shortcart import (
     check_winner,
 )
 
+log = Path(__file__).resolve().parent.parent.parent.joinpath("logs/debug.log")
+
 logger = logging.getLogger('custom')
 
 logger.setLevel(level=logging.DEBUG)
 
 log_handlers = {
-    "file_debug": logging.FileHandler('/home/alex/Documents/Projects/battleShips/env2/debug.log', mode="w"),
-    "file_info": logging.FileHandler('/home/alex/Documents/Projects/battleShips/env2/debug.log', mode="w"),
+    "file_debug": logging.FileHandler(log, mode="w"),
+    "file_info": logging.FileHandler(log, mode="w"),
 }
 log_handlers["file_debug"].setLevel(logging.DEBUG)
 log_handlers["file_info"].setLevel(logging.INFO)
@@ -46,7 +49,6 @@ logger.addHandler(log_handlers["file_info"])
 
 CURRENT_USER_KEY_PREFIX = 'current:{}'
 SET_CONTAINS_SHOTS_USER_KEY_PREFIX = 'set'
-
 
 
 class GameView(generics.RetrieveAPIView):

@@ -13,6 +13,7 @@ logger = logging.getLogger('custom')
 redis = redis_client.Redis(host='localhost', port=6379, db=0)
 from SeaWar.settings import MAXIMUM_ALLOWED_NUMBER_OF_PLAYERS
 
+
 class Ship:
     def __init__(self, coordinates, hit_coordinates):
         self.coordinates = coordinates
