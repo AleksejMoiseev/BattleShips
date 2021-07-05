@@ -3,7 +3,7 @@ import pytest
 from rest_framework.test import APIRequestFactory
 
 # Create your tests here.
-from battle_of_ships.shortcart import *
+from battle_of_ships.shortcart import Ship
 
 
 @pytest.fixture

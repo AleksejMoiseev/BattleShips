@@ -7,11 +7,18 @@ import redis as redis_client
 
 from battle_of_ships.models import User
 import logging
+from enum import Enum
 
 logger = logging.getLogger('custom')
 
 redis = redis_client.Redis(host='localhost', port=6379, db=0)
 from SeaWar.settings import MAXIMUM_ALLOWED_NUMBER_OF_PLAYERS
+
+
+class FireResult(Enum):
+    KILLED = 'killed'
+    MISSED = 'mimo'
+    HIT = 'ranen'
 
 
 class Ship:
@@ -27,12 +34,12 @@ class Ship:
 
     def check_hit(self, coordinate):
         if not (coordinate in self.coordinates):
-            return 'mimo'
+            return FireResult.MISSED
         if not (coordinate in self.hit_coordinates):
             self.hit_coordinates.append(coordinate)
         if len(self.coordinates) == len(self.hit_coordinates):
-            return 'killed'
-        return 'ranen'
+            return FireResult.KILLED
+        return FireResult.HIT
 
     def killed(self):
         if len(self.coordinates) == len(self.hit_coordinates):
@@ -127,11 +134,11 @@ def ships_to_json(arrships_objects):
 def check_hit(harbor, coordinate):
     for ship in harbor:
         hit_result = ship.check_hit(coordinate=coordinate)
-        if hit_result == "ranen":
-            return "ranen"
-        if hit_result == "killed":
-            return "killed"
-    return "mimo"
+        if hit_result == FireResult.MISSED:
+            return FireResult.MISSED
+        if hit_result == FireResult.KILLED:
+            return FireResult.KILLED
+    return FireResult.HIT
 
 
 def check_winner(arr_ships):
