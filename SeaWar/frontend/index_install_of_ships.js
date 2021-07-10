@@ -260,11 +260,13 @@ let ready = function(){
                      "id": USER,
             },
             success: function(data, output, status){
-                if ( status.status==204 ){ $("#info").text("Ждем установку кораблей противникаб пробуйте позже"); }
+                if ( status.status==204 ){ $("#info").text("Ждем установку кораблей противникаб пробуйте позже");
+                         setInterval(get_set_shots_enemy_user, 5000);
+                }
 
                 if ( status.status==200 ){
                     get_name_user_next_move();
-                    tameID = setInterval(get_set_shots_enemy_user, 100);
+                    setInterval(get_set_shots_enemy_user, 5000);
                 }
             },
         });

@@ -176,11 +176,13 @@ class UpdateShip(generics.RetrieveUpdateAPIView):
 def faire(request):
     user_id = request.COOKIES.get('id')
     coordinate = request.POST['coordinate']
+    logger.debug(msg=f'Стреляет {user_id}, coordinata: {coordinate}')
     response = HttpResponse()
 
     game, list_of_ships_enemy = get_enemy_ships(user_id=user_id)
     harbor_arr_ships_enemy = get_array_ships(list_json_objects=list_of_ships_enemy)
     hit_result = check_hit(harbor=harbor_arr_ships_enemy, coordinate=coordinate)
+    logger.debug(msg=f"hit_rezult : {hit_result}, harborr_enemy: {harbor_arr_ships_enemy}, list_ship: {list_of_ships_enemy}")
     harbor_arr_ready_save_to_database = ships_to_json(arrships_objects=harbor_arr_ships_enemy)
     save_enemy_ship(ships_json=harbor_arr_ready_save_to_database, user_id=user_id)
     if check_winner(arr_ships=harbor_arr_ships_enemy):
