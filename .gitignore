@@ -9,4 +9,4 @@ prod_settings.py
 debug.log
 /db_django/
 db_django/
-../logs/debug.log
+/logs/
