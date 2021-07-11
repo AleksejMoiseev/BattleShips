@@ -2,7 +2,6 @@
 helper
 """
 import logging
-from enum import Enum
 from random import choice
 
 from battle_of_ships.models import User
@@ -13,7 +12,7 @@ logger = logging.getLogger('custom')
 from SeaWar.settings import MAXIMUM_ALLOWED_NUMBER_OF_PLAYERS
 
 
-class FireResult(Enum):
+class FireResult:
     KILLED = 'killed'
     MISSED = 'mimo'
     HIT = 'ranen'
@@ -32,11 +31,14 @@ class Ship:
 
     def check_hit(self, coordinate):
         if not (coordinate in self.coordinates):
+            logger.debug(msg=f"МИМО : {FireResult.MISSED}, coordinates: {self.coordinates}")
             return FireResult.MISSED
         if not (coordinate in self.hit_coordinates):
             self.hit_coordinates.append(coordinate)
         if len(self.coordinates) == len(self.hit_coordinates):
+            logger.debug(msg=f"УБИЛИ : {FireResult.KILLED}")
             return FireResult.KILLED
+        logger.debug(msg=f"Ранили : {FireResult.HIT}")
         return FireResult.HIT
 
     def killed(self):
@@ -73,11 +75,7 @@ def next_move(user_id):
 def choice_ready_user(user_id):
     logger.info(msg='Работает функция choice')
     list_ready = []
-    # user = u.objects.get(pk=user_id)
-    # game = user.game
-    # all_user_in_game = u.objects.filter(game=user.game)
     game, all_user_in_game = get_users(user_id=user_id)
-    logger.debug(msg=f"game-{game}, all_user_in_game -{all_user_in_game}")
     if len(all_user_in_game) < MAXIMUM_ALLOWED_NUMBER_OF_PLAYERS:
         return False
     for player in all_user_in_game:
@@ -94,7 +92,6 @@ def choice_ready_user(user_id):
 
 def get_enemy(user_id):
     game, all_user_in_game = get_users(user_id=user_id)
-    logger.debug(msg=f'all_user_in_game - {all_user_in_game}')
     if len(all_user_in_game) < MAXIMUM_ALLOWED_NUMBER_OF_PLAYERS:
         return None, None
     for enemy in all_user_in_game:
@@ -132,11 +129,11 @@ def ships_to_json(arrships_objects):
 def check_hit(harbor, coordinate):
     for ship in harbor:
         hit_result = ship.check_hit(coordinate=coordinate)
-        if hit_result == FireResult.MISSED:
-            return FireResult.MISSED
+        if hit_result == FireResult.HIT:
+            return FireResult.HIT
         if hit_result == FireResult.KILLED:
             return FireResult.KILLED
-    return FireResult.HIT
+    return FireResult.MISSED
 
 
 def check_winner(arr_ships):
