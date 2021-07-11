@@ -7,3 +7,6 @@ sqlite3
 local_settings.py
 prod_settings.py
 debug.log
+/db_django/
+db_django/
+../logs/debug.log

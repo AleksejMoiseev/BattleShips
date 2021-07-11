@@ -1,17 +1,15 @@
 """
 helper
 """
-from random import choice
-
-import redis as redis_client
-
-from battle_of_ships.models import User
 import logging
 from enum import Enum
+from random import choice
+
+from battle_of_ships.models import User
+from battle_of_ships.redis import redis
 
 logger = logging.getLogger('custom')
 
-redis = redis_client.Redis(host='localhost', port=6379, db=0)
 from SeaWar.settings import MAXIMUM_ALLOWED_NUMBER_OF_PLAYERS
 
 

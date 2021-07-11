@@ -15,11 +15,12 @@ from rest_framework.views import APIView
 from SeaWar.settings import MAXIMUM_ALLOWED_NUMBER_OF_PLAYERS
 from battle_of_ships.serializers import *
 from battle_of_ships.shortcart import (
-    redis, next_move, choice_ready_user,
+    next_move, choice_ready_user,
     get_enemy, DoesNotUser, get_enemy_ships, get_array_ships,
     check_hit, ships_to_json, save_enemy_ship,
     check_winner,
 )
+from battle_of_ships.redis import redis
 
 log = Path(__file__).resolve().parent.parent.parent.joinpath("logs/debug.log")
 
